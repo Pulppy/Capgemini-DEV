@@ -1,0 +1,21 @@
+
+[36m___________________________________________  
+	Username: thocon7278@gmail.com           
+	Login type: login
+___________________________________________  
+[0m
+filling classNames
+All unit test will be executed
+Unit Test Results:
+
+___________________________________________
+TrailheadAPI_Test.loadUserBadges
+-------- Message --------
+System.AssertException: Assertion Failed: Expected: 1, Actual: 0
+-------- Stacktrace --------
+(trailheadapp)
+___________________________________________
+
+BUILD SUCCESSFUL
+
+Total time: 32.987 secs

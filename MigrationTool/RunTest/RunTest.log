@@ -1,0 +1,167 @@
+[sf:compileAndTest] compileAndTest on https://login.salesforce.com/, compiling 0 classes and 0 triggers, deleting 0 classes and 0 triggers
+
+BUILD FAILED
+
+C:\Program Files (x86)\Jenkins\workspace\Test\MigrationTool\build.xml:303: Failed:
+testcase in class 'AsyncParksServices' method 'null' failure:line 6, column 13: Invalid type: parksServices.byCountryResponse
+testcase in class 'ChangePasswordController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChangePasswordController : Invalid type: parksServices.byCountryResponse
+testcase in class 'ChangePasswordControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChangePasswordControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ChatterAnswersAuthProviderRegistration' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChatterAnswersAuthProviderRegistration : Invalid type: parksServices.byCountryResponse
+testcase in class 'ChatterAnswersAuthProviderRegTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChatterAnswersAuthProviderRegTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ChatterAnswersCreateAccountTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChatterAnswersCreateAccountTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ChatterAnswersEscalationTriggerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChatterAnswersEscalationTriggerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ChatterAnswersRegistration' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ChatterAnswersRegistration : Invalid type: parksServices.byCountryResponse
+testcase in class 'cmmCampaignMembershipManagerController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class cmmCampaignMembershipManagerController : Invalid type: parksServices.byCountryResponse
+testcase in class 'cmmTestClass' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class cmmTestClass : Invalid type: parksServices.byCountryResponse
+testcase in class 'cmmTestDataGenerator' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class cmmTestDataGenerator : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesLandingController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesLandingController : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesLandingControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesLandingControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesLoginController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesLoginController : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesLoginControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesLoginControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesSelfRegConfirmController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesSelfRegConfirmController : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesSelfRegConfirmControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesSelfRegConfirmControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesSelfRegController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesSelfRegController : Invalid type: parksServices.byCountryResponse
+testcase in class 'CommunitiesSelfRegControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class CommunitiesSelfRegControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'DailyLeadProcessor' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class DailyLeadProcessor : Invalid type: parksServices.byCountryResponse
+testcase in class 'DailyLeadProcessorTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class DailyLeadProcessorTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ExportActionPlanTemplate' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ExportActionPlanTemplate : Invalid type: parksServices.byCountryResponse
+testcase in class 'FieldCustomValidationException' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class FieldCustomValidationException : Invalid type: parksServices.byCountryResponse
+testcase in class 'ForgotPasswordController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ForgotPasswordController : Invalid type: parksServices.byCountryResponse
+testcase in class 'ForgotPasswordControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ForgotPasswordControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ImportActionPlanTemplate' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ImportActionPlanTemplate : Invalid type: parksServices.byCountryResponse
+testcase in class 'ImportException' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ImportException : Invalid type: parksServices.byCountryResponse
+testcase in class 'ImportTemplateController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ImportTemplateController : Invalid type: parksServices.byCountryResponse
+testcase in class 'InstallationTests' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class InstallationTests : Invalid type: parksServices.byCountryResponse
+testcase in class 'LeadProcessor' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LeadProcessor : Invalid type: parksServices.byCountryResponse
+testcase in class 'LeadProcessorTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LeadProcessorTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'LightningForgotPasswordController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LightningForgotPasswordController : Invalid type: parksServices.byCountryResponse
+testcase in class 'LightningForgotPasswordControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LightningForgotPasswordControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'LightningLoginFormController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LightningLoginFormController : Invalid type: parksServices.byCountryResponse
+testcase in class 'LightningLoginFormControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LightningLoginFormControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'LightningSelfRegisterController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LightningSelfRegisterController : Invalid type: parksServices.byCountryResponse
+testcase in class 'LightningSelfRegisterControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LightningSelfRegisterControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'LN_CustomDashboardLinkController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LN_CustomDashboardLinkController : Invalid type: parksServices.byCountryResponse
+testcase in class 'LN_TodayTaskController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class LN_TodayTaskController : Invalid type: parksServices.byCountryResponse
+testcase in class 'MaintenanceRequestHelper' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class MaintenanceRequestHelper : Invalid type: parksServices.byCountryResponse
+testcase in class 'ML150_SimplifiedLeadFlowController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ML150_SimplifiedLeadFlowController : Invalid type: parksServices.byCountryResponse
+testcase in class 'MyLeadPageCtrl' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class MyLeadPageCtrl : Invalid type: parksServices.byCountryResponse
+testcase in class 'MyProfilePageController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class MyProfilePageController : Invalid type: parksServices.byCountryResponse
+testcase in class 'MyProfilePageControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class MyProfilePageControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ParkLocator' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ParkLocator : Invalid type: parksServices.byCountryResponse
+testcase in class 'ParkLocatorTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ParkLocatorTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'ParkService' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ParkService : Invalid type: parksServices.byCountryResponse
+testcase in class 'ParkServiceMock' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ParkServiceMock : Invalid type: parksServices.byCountryResponse
+testcase in class 'ProcessorControl' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class ProcessorControl : Invalid type: parksServices.byCountryResponse
+testcase in class 'RandomContactFactory' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class RandomContactFactory : Invalid type: parksServices.byCountryResponse
+testcase in class 'BeAwesome' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class BeAwesome : Invalid type: parksServices.byCountryResponse
+testcase in class 'SiteLoginController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class SiteLoginController : Invalid type: parksServices.byCountryResponse
+testcase in class 'SiteLoginControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class SiteLoginControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'SiteRegisterController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class SiteRegisterController : Invalid type: parksServices.byCountryResponse
+testcase in class 'SiteRegisterControllerTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class SiteRegisterControllerTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'startHereController' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class startHereController : Invalid type: parksServices.byCountryResponse
+testcase in class 'testApexWorkbook' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class testApexWorkbook : Invalid type: parksServices.byCountryResponse
+testcase in class 'TestRestrictContactByName' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class TestRestrictContactByName : Invalid type: parksServices.byCountryResponse
+testcase in class 'TestVerifyDate' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class TestVerifyDate : Invalid type: parksServices.byCountryResponse
+testcase in class 'VerifyDate' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class VerifyDate : Invalid type: parksServices.byCountryResponse
+testcase in class 'WarehouseCalloutService' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class WarehouseCalloutService : Invalid type: parksServices.byCountryResponse
+testcase in class 'WarehouseCalloutServiceMock' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class WarehouseCalloutServiceMock : Invalid type: parksServices.byCountryResponse
+testcase in class 'WarehouseCalloutServiceTest' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class WarehouseCalloutServiceTest : Invalid type: parksServices.byCountryResponse
+testcase in class 'WarehouseSyncSchedule' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class WarehouseSyncSchedule : Invalid type: parksServices.byCountryResponse
+testcase in class 'XMLDom' method 'null' failure:line -1, column -1: Dependent class is invalid and needs recompilation:
+ Class XMLDom : Invalid type: parksServices.byCountryResponse
+Code coverage error on AccountTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on AccountAddressTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on CampaignTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on ActionPlanTaskTemplateTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on OpportunityTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on ClosedOpportunityTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on LeadTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on ActionPlanTaskTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on ActionPlanTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on chatter_answers_question_escalation_to_case_trigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on ContractTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on RestrictContactByName: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on ContactTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error on CaseTrigger: Test coverage of selected Apex Trigger is 0%, at least 1% test coverage is required
+Code coverage error: Average test coverage across all Apex Classes and Triggers is 0%, at least 75% test coverage is required.
+
+	at com.salesforce.ant.CompileAndTest.execute(CompileAndTest.java:99)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:293)
+	at sun.reflect.GeneratedMethodAccessor4.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)
+	at java.lang.reflect.Method.invoke(Method.java:497)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:106)
+	at org.apache.tools.ant.Task.perform(Task.java:348)
+	at org.apache.tools.ant.Target.execute(Target.java:435)
+	at org.apache.tools.ant.Target.performTasks(Target.java:456)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1405)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1376)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1260)
+	at org.apache.tools.ant.Main.runBuild(Main.java:853)
+	at org.apache.tools.ant.Main.startAnt(Main.java:235)
+	at org.apache.tools.ant.launch.Launcher.run(Launcher.java:285)
+	at org.apache.tools.ant.launch.Launcher.main(Launcher.java:112)

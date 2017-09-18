@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Deployment" default="antScript" basedir="." xmlns:sf="antlib:com.salesforce">
+	<property file="build.properties"/>
+	<property name="workspacedir" location="..${file.separator}..${file.separator}"/>
+	<property environment="${basedir}" relative="true"/>
+
+	<echo>OS: ${os.arch}</echo>
+	<echo>VM: ${java.vm.name}</echo>
+	<echo>AntHome: ${ant.home}</echo>
+	<echo>AntProjectName: ${ant.project.name}</echo>
+	<echo>JavaHome: ${java.home}</echo>
+	<echo>Username: ${user.name}</echo>
+	<echo>UserHome: ${user.home}</echo>
+	<echo>UserDir: ${user.dir}</echo>
+	<echo>Base Dir Path also Work Dir: ${basedir}</echo>
+	<echo>file.separator: ${file.separator}</echo>
+	<echo>/////////////////////////////////////////////////</echo>
+	<echo>workspacedir Dir Path: ${workspacedir}</echo>
+	<echo>Git Dir Path: ${workspacedir}${file.separator}${job.name}${file.separator}${workGit}</echo>
+	<echo>job Dir : ${workspacedir}${file.separator}${job.name}</echo>
+	<echo>/////////////////////////////////////////////////</echo>
+	<echo>workspace path: ${workspace.path}</echo>
+	<echo>Api version: ${version}</echo>
+	<echo>Binh Dang</echo>
+
+	<!--Set Proxy-->
+	<target name="proxy">
+		<setproxy proxyhost="${proxy.host}" proxyport="${proxy.port}" proxyuser="${proxy.user}" proxypassword="${proxy.pwd}"/>
+	</target>
+
+	<!--Get xml file from Workspace-->
+	<target name="getDeploymentXML">
+		<delete dir="${workPackageDir}${file.separator}04_retrieve"/>
+		<mkdir dir="${workPackageDir}${file.separator}04_retrieve"/>
+		<delete dir="${workPackageDir}${file.separator}02_Deploy"/>
+		<mkdir dir="${workPackageDir}${file.separator}02_Deploy"/>
+		<copy file="${workspacedir}${file.separator}${job.name}${file.separator}package.xml" tofile="${workPackageDir}${file.separator}04_retrieve${file.separator}package.xml" />
+		<copy file="${workspacedir}${file.separator}${job.name}${file.separator}package.xml" tofile="${workPackageDir}${file.separator}02_Deploy${file.separator}package.xml" />
+	</target>
+
+	<target name="retrieve">
+		<delete dir="${basedir}${file.separator}${workDeployDir}"/>
+		<mkdir dir="${basedir}${file.separator}${workDeployDir}"/>
+		<copy file="${workPackageDir}${file.separator}02_Deploy${file.separator}package.xml" tofile="${basedir}${file.separator}${workDeployDir}${file.separator}package.xml" />
+		<sf:retrieve username="${from.username}" password="${from.password}" serverurl="${from.serverurl}" 
+				  retrieveTarget="${basedir}${file.separator}${workDeployDir}" maxPoll="${maxPoll}" unpackaged="${basedir}${file.separator}${workDeployDir}${file.separator}package.xml" />
+	</target>
+
+	<target name="rundeploy">
+		<script language="javascript"><![CDATA[
+		var echo = Deployment.createTask("echo");
+		var deployTask = Deployment.createTask('antlib:com.salesforce:deploy');
+		deployTask.setUsername(Deployment.getProperty("to.username"));
+		deployTask.setPassword(Deployment.getProperty("to.password"));
+		deployTask.setServerURL(Deployment.getProperty("to.serverurl"));
+		deployTask.setDeployRoot(Deployment.getProperty("basedir")+Deployment.getProperty("file.separator")+Deployment.getProperty("workDeployDir"));
+		deployTask.setMaxPoll(Deployment.getProperty("maxPoll"));
+		deployTask.setPollWaitMillis(Deployment.getProperty("pollWaitMillis"));
+		deployTask.setTestLevel(Deployment.getProperty("testLevel"));
+		
+		deployTask.setCheckonly(Deployment.getProperty("checkonly")== 'true');
+		echo.setMessage("Begin Deploy Process");
+		echo.perform();
+
+		var tests = Deployment.getProperty('tests');
+		if (tests) {
+			echo.setMessage("Tests:"+ tests);
+			echo.perform();
+			deployTask.setTestLevel('RunSpecifiedTests');
+			tests = tests.split(',');
+			for (var i = 0; i < tests.length; i++) {
+				var runTest = java.lang.Class.forName("com.salesforce.ant.DeployTask$CodeNameElement").newInstance();
+				runTest.addText(tests[i]);
+				deployTask.addRunTest(runTest);
+			}
+		}
+		deployTask.perform();
+	]]></script>
+	</target>
+
+	<target name="deploy">
+	<sfDeployUnmanaged username="${to.username}" password="${to.password}" serverUrl="${to.serverurl}" deployRoot="${basedir}${file.separator}${workDeployDir}" 
+	testLevel="${testLevel}" checkOnly="${checkonly}" maxPoll="${maxPoll}" pollWaitMillis="${pollWaitMillis}" purgeOnDelete="true" ignoreWarnings="true">
+		<fileset dir="${basedir}${file.separator}${workDeployDir}${file.separator}classes">
+			<include name="**/*Test*.cls"/>
+		</fileset>
+	</sfDeployUnmanaged>
+	</target>
+
+	<scriptdef name="sfDeployUnmanaged" language="javascript">
+	<attribute name="username"/>
+	<attribute name="password"/>
+	<attribute name="serverurl"/>
+	<attribute name="deployroot"/>
+	<attribute name="testlevel"/>
+	<attribute name="checkonly"/>
+	<attribute name="maxpoll"/> 	 
+	<attribute name="pollwaitmillis"/>
+	<attribute name="purgeondelete"/>
+	<attribute name="ignorewarnings"/>
+	<element name="fileset" type="fileset"/>
+
+	<![CDATA[
+		var filesets = elements.get("fileset");
+		var filesetsIterator = filesets.iterator();
+		var projectClasses = [];
+		while(filesetsIterator.hasNext()){
+			var fs = filesetsIterator.next();
+			var iter = fs.iterator();
+			while(iter.hasNext()){
+				var resource = iter.next();
+				var clazz = resource.getName().replace(".cls","");
+				self.log("TEST CLASS: " + clazz);
+				projectClasses.push(clazz);
+			}
+		}
+
+		var deployTask = project.createTask("antlib:com.salesforce:deploy");
+		//var echo = project.createTask("echo");
+		deployTask.setPurgeOnDelete(attributes.get("purgeondelete") == 'true');
+		deployTask.setIgnoreWarnings(attributes.get("ignorewarnings") == 'true');
+		deployTask.setUsername(attributes.get("username"));
+		deployTask.setPassword(attributes.get("password"));
+		deployTask.setServerURL(attributes.get("serverurl"));
+		deployTask.setDeployRoot(attributes.get("deployroot"));
+		deployTask.setTestLevel(attributes.get("testlevel"));
+		//echo.setMessage("testlevel:"+attributes.get("testlevel"));
+		//echo.perform();
+		self.log("testlevel: " + deployTask.getTestLevel());
+		deployTask.setCheckonly(attributes.get("checkonly")=='true');
+		deployTask.setMaxPoll(attributes.get("maxpoll"));
+		deployTask.setPollWaitMillis(attributes.get("pollwaitmillis"));
+		//deployTask.setTrace(attributes.get("trace") == 'true');
+		
+		//Blows up when build timeout is reached if we don't set this (it uses this value when formatting the exception it throws)
+		deployTask.setOwningTarget(self.owningTarget);
+	
+		if (attributes.get("testlevel")=='RunSpecifiedTests') {
+			//echo.setMessage("RunSpecifiedTests:");
+			//echo.perform();
+			self.log("RunSpecifiedTests: " );
+			
+			var classClazz = deployTask.getClass().getClassLoader().loadClass("com.salesforce.ant.DeployTask$CodeNameElement");
+			for(i in projectClasses){
+			var clazz = classClazz.newInstance();
+			clazz.addText(projectClasses[i]);
+			deployTask.addRunTest(clazz);
+			}
+		}
+		deployTask.execute();
+		//deployTask.perform();
+	]]>
+	</scriptdef>
+	
+	<!-- Deploy a zip of metadata files to the org -->
+	<target name="deployZip">
+		<delete dir="${basedir}/${workDeployDirZip}"/>
+		<mkdir dir="${basedir}/${workDeployDirZip}"/>
+		<zip destfile="${basedir}/${workDeployDirZip}/deploy.zip" basedir="${basedir}/${workDeployDir}"/>
+		<sf:deploy username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" zipFile="${basedir}/${workDeployDirZip}/deploy.zip" 
+				 checkonly="${checkonly}" maxPoll="${maxPoll}" testLevel="${testLevel}" pollWaitMillis="${pollWaitMillis}"/>
+	</target>
+
+	<!--Return Deploy ${workPackageDir}${file.separator}02_Deploy${file.separator}package.xml-->
+	<target name="undeploy">
+		<copy file="${workspacedir}${file.separator}${job.name}${file.separator}package.xml" tofile="${workPackageDir}${file.separator}03_ReturnDeploy${file.separator}destructiveChanges.xml" />
+		<sf:deploy username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" deployRoot="${basedir}/${workBackUpDir}"
+				  deployroot="${workPackageDir}${file.separator}03_ReturnDeploy"  maxPoll="${maxPoll}" />
+	</target>
+
+	<!--Back Up-->
+	<target name="backup">
+		<delete dir="${workBackUpDir}"/>
+		<mkdir dir="${workBackUpDir}"/>
+		<copy file="${workPackageDir}${file.separator}01_BackUp${file.separator}package.xml" tofile="${basedir}${file.separator}${workBackUpDir}${file.separator}package.xml" />
+		<sf:retrieve username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" 
+				  retrieveTarget="${workBackUpDir}" maxPoll="${maxPoll}" unpackaged="${basedir}${file.separator}${workDeployDir}${file.separator}package.xml" />
+	</target>
+	
+	<!--Back Up Zip-->
+	<target name="backupzip">
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd_HH-mm-ss" locale="cn,CN"/>
+		</tstamp>
+		<echo>the system date/time is ${TODAY}</echo>
+		<echo>Zip Name ${file.separator}</echo>
+		<mkdir dir="${workBackUpZipDir}"/>
+		<copy file="${workPackageDir}${file.separator}01_BackUp${file.separator}package.xml" tofile="${basedir}${file.separator}${workBackUpZipDir}${file.separator}package.xml" />
+		<sf:retrieve username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" 
+				  retrieveTarget="${workBackUpZipDir}" maxPoll="${maxPoll}" unpackaged="${basedir}${file.separator}${workBackUpZipDir}${file.separator}package.xml" unzip="false" />
+	</target>
+
+	<!-- Retrieve the information on all supported metadata type -->
+	<target name="describeMetadata_Source">
+		<sf:describeMetadata username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" resultFilePath="${basedir}${file.separator}${workLogDir}${file.separator}describeSource.log"/>
+	</target>
+
+	<!-- Retrieve the information on all supported metadata type -->
+	<target name="describeMetadata_Target">
+		<sf:describeMetadata username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" resultFilePath="${basedir}${file.separator}${workLogDir}${file.separator}describeTarget.log"/>
+	</target>
+
+	<!-- Time test-->
+	<target name="echotime">
+		<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd:HH-mm-ss" locale="cn,CN"/>
+		</tstamp>
+		<echo>the system date/time is ${TODAY}</echo>
+	</target>
+
+	<target name="testTime">
+		<MyTimestamp></MyTimestamp>
+			<sleep seconds="5"></sleep>
+		<MyTimestamp></MyTimestamp>
+	</target>
+
+	<macrodef name="MyTimestamp">
+	<sequential >
+		<tstamp>
+			<format property="current.time" pattern="MM/dd/yyyy hh:mm:ss aa"/>
+		</tstamp>
+		<echo message="RUN_TIME: ${current.time}"/>
+	</sequential>
+	</macrodef>
+
+	<!-- Git test-->
+	<macrodef name="git">
+		<attribute name="command" />
+		<attribute name="dir" default="${gt.Directory}" />
+		<element name="args" optional="true" />
+		<sequential>
+			<echo message="Executing Command in folder @{dir}" />
+			<echo message="git @{command}" />
+			<exec executable="git" dir="@{dir}">
+				<arg value="@{command}" />
+				<args/>
+			</exec>
+		</sequential>
+	</macrodef>
+
+	<target name="GitOperations" description="Commits all changes to version git" depends="backup">
+		<echo message="Commiting all changes with message ${gt.commitMessage}" /> 
+		<git command="add">
+			<args>
+				<arg value="." />
+			</args>
+		</git>
+		<git command="commit">
+			<args>
+				<arg value="-am ${gt.commitMessage}" />
+			</args>
+		</git>
+	</target>
+
+	<target name="runBatchScript">
+	<exec dir="${workspacedir}${file.separator}${ant.project.name}" executable="cmd" os="Windows 7">
+		<arg line="/c copyfolder.bat"/>
+	</exec>
+	</target>
+
+	<target name="antScript">
+	<script language="javascript"> <![CDATA[
+		for (i=1; i<=10; i++) {
+			echo = Deployment.createTask("echo");
+			echo.setMessage(i*i);
+			echo.perform();
+		}
+	]]> </script>
+	</target>
+
+	<target name="testTest">
+	<sfCompileAndTestUnmanaged checkOnly="false" username="${to.username}" password="${to.password}" server="${to.serverurl}" testLevel="${testLevel}">
+		<fileset dir="${basedir}${file.separator}${workDeployDir}${file.separator}classes">
+			<include name="**/*Test*.cls"/>
+		</fileset>
+	</sfCompileAndTestUnmanaged>
+	</target>
+
+	<scriptdef name="sfCompileAndTestUnmanaged" language="javascript">
+	<attribute name="checkonly"/>
+	<attribute name="username"/>
+	<attribute name="password"/>
+	<attribute name="server"/>
+	<attribute name="testlevel"/>
+	<attribute name="trace"/>
+	<element name="fileset" type="fileset"/>
+
+	<![CDATA[
+		var filesets = elements.get("fileset");
+		var filesetsIterator = filesets.iterator();
+		var projectClasses = [];
+		while(filesetsIterator.hasNext()){
+			var fs = filesetsIterator.next();
+			var iter = fs.iterator();
+			while(iter.hasNext()){
+				var resource = iter.next();
+				var clazz = resource.getName().replace(".cls","");
+				self.log("Test CLASS: " + clazz);
+				projectClasses.push(clazz);
+			}
+		}
+
+		var task = project.createTask("antlib:com.salesforce:compileAndTest");
+		task.setCheckonly(attributes.get("checkonly") == 'true');
+		task.setUsername(attributes.get("username"));
+		task.setPassword(attributes.get("password"));
+		task.setServer(attributes.get("server"));
+		task.setTrace(attributes.get("trace") == 'true');
+		//I tried 'importPackage' and conventional instantiation but couldn't get the inner class to instantiate; this works though
+		var testsElement = task.getClass().getClassLoader().loadClass("com.salesforce.ant.CompileAndTest$RunTestsElement").newInstance();
+		task.addRunTests(testsElement);
+		var classClazz = task.getClass().getClassLoader().loadClass("com.salesforce.ant.CompileAndTest$CodeNameElement");
+		for(i in projectClasses){
+			var clazz = classClazz.newInstance();
+			clazz.addText(projectClasses[i]);
+			testsElement.addClass(clazz);
+			self.log("CLASS: " + i + " ---------" + projectClasses[i]);
+		}
+		task.execute();
+	]]>
+	</scriptdef>
+
+	<target name="runTests" >
+	<tstamp>
+		<format property="TODAY" pattern="yyyy-MM-dd_HH-mm-ss" locale="cn,CN"/>
+	</tstamp>
+	<echo>the system date/time is ${TODAY}</echo>
+		<record name="${basedir}${file.separator}${workRunTestDir}${file.separator}RunTest${TODAY}.log" action="start"/>
+		<sf:compileAndTest  username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" >
+	<runTests Alltests="true"/>
+		</sf:compileAndTest>
+		<record name="${basedir}${file.separator}${workRunTestDir}${file.separator}RunTest${TODAY}.log" action="stop"/>  
+	</target>
+</project>
