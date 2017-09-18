@@ -42,7 +42,7 @@
 		<delete dir="${basedir}${file.separator}${workDeployDir}"/>
 		<mkdir dir="${basedir}${file.separator}${workDeployDir}"/>
 		<copy file="${workPackageDir}${file.separator}02_Deploy${file.separator}package.xml" tofile="${basedir}${file.separator}${workDeployDir}${file.separator}package.xml" />
-		<sf:retrieve username="${from.username}" password="${from.password}" serverurl="${from.serverurl}" 
+		<sf:retrieve username="${to.username}" password="${to.password}" serverurl="${to.serverurl}" 
 				  retrieveTarget="${basedir}${file.separator}${workDeployDir}" maxPoll="${maxPoll}" unpackaged="${basedir}${file.separator}${workDeployDir}${file.separator}package.xml" />
 	</target>
 
