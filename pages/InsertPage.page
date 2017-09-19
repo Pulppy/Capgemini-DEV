@@ -1,0 +1,58 @@
+<apex:page showHeader="true" sidebar="true" controller="insertHocSinh">
+	
+	<apex:form >	
+	<apex:pageMessages id="msg" />
+		<apex:pageBlock title="Insert Student">
+			<table>
+			  <tr>
+			    <th>Ho Hoc Sinh: </th>
+			    <td><apex:inputField value="{!hocsinh.HoHocSinhs__c}" /></td>
+			  </tr>
+
+			  <tr>
+			    <th>Ten Hoc Sinh: </th>
+			    <td><apex:inputField value="{!hocsinh.TenHocSinh__c}" /></td>
+			  </tr>
+
+			  <tr>
+			    <th>Gioi Tinh : </th>
+			    <td><apex:inputField value="{!hocsinh.GioiTinh__c}" />Nam</td>
+			  </tr>
+
+			  <tr>
+			    <th>Ngay Sinh </th>
+			    <td><apex:inputField value="{!hocsinh.NgaySinh__c}"/></td>
+			  </tr>
+
+			  <tr>
+			    <th>Diem 1: </th>
+			    <td><apex:inputField value="{!hocsinh.Diem1__c}"/></td>
+			  </tr>
+
+			  <tr>
+			    <th>Diem 2: </th>
+			    <td><apex:inputField value="{!hocsinh.Diem2__c}"/></td>
+			  </tr>
+
+			  <tr>
+			    <th>Diem 3: </th>
+			    <td><apex:inputField value="{!hocsinh.Diem3__c}"/></td>
+			  </tr>
+
+			  <tr>
+			    <th>Lop Hoc: </th>
+			    <td> <apex:selectList id="chooseColor" value="{!hocsinh.LopHoc__c}" size="1">
+			             <apex:selectOptions value="{!lop}"/>
+			         </apex:selectList>
+          		</td>
+			  </tr>
+
+			  <tr>
+			    <th><apex:commandButton action="{!themHocSinh}"  value="Insert" reRender="msg"/>	</th>
+			  	<th><apex:commandButton action="{!backIndexPage}"  value="Back" reRender="msg"/>	</th>
+			  </tr>
+			  	
+			</table>				
+		</apex:pageBlock>
+	</apex:form>
+</apex:page>
