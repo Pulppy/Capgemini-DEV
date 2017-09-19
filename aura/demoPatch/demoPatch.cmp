@@ -76,7 +76,6 @@
 										<p class="slds-truncate" title="{!account.Name}" >
 											<h3 class="slds-tile__title slds-truncate" title="Anypoint Connectors">
 												<lightning:icon iconName="utility:email" size="x-small" />
-                                                &lt;
 												<a href="javascript:void(0);"> {!account.Name}</a>
 											</h3>
 										</p>
