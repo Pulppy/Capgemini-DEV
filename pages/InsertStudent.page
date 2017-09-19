@@ -1,0 +1,13 @@
+<apex:page showHeader="true" sidebar="true" controller="InsertStudent">
+	<apex:form >
+		<th><apex:commandButton action="{!debugStudent}" onclick="test()" value="Debug" reRender="msg"/>	</th>
+		<th> <apex:detail subject="{!hocSinh.id}" relatedList="false" title="false"/></th>
+
+	</apex:form>
+
+	<script>
+		function test() {
+			
+		}
+	</script>
+</apex:page>

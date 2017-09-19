@@ -1,0 +1,46 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+
+	<ltng:require styles="{!$Resource.fontAwesomeFinal + '/fontawesome/css/font-awesome.css'}"/>
+	<aura:attribute name="idap" type="String" default="false" /> 
+	<aura:attribute name="nameap" type="String" default="false" />
+	<aura:attribute name="accList" type="account[]" default="[]" />
+	<aura:attribute name="accDisplay" type="account[]" default="[]" />
+	<aura:attribute name="offset" type="integer" default="5" />
+	<aura:attribute name="pos" type="integer" default="0" />
+	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+	<div class="slds-section slds-is-open slds-card" >
+		<div id="headersection">
+			<h3 class="slds-section__title slds-theme_shade setcolor" >
+				<span class="slds-truncate slds-p-horizontal_small" title="Section Title"  >Application View</span>
+			</h3>
+		</div>
+
+		<div aria-hidden="false" class="slds-section__content">
+			<aura:iteration items="{!v.accDisplay}" var="item" indexVar="i">
+				<ul class="marginleft">
+					<li>
+                        <dl class="slds-dl_inline">
+                          <dt class="slds-dl_inline__label">
+                              <lightning:icon iconName="utility:notebook" size="xx-small" class=" setcoloricon"/>
+                            </dt>
+                          <dd class="slds-dl_inline__detail">
+                             <a> {! item.id}</a>
+                            </dd> 
+                        </dl> 
+					</li>
+					<li>
+                         <dl class="slds-dl_inline">
+                          <dt class="slds-dl_inline__label">
+                              <lightning:icon iconName="utility:user" size="xx-small" class=" setcoloricon"/>
+                            </dt>
+                          <dd class="slds-dl_inline__detail">
+                            	<a> {! item.name}</a>
+                            </dd> 
+                        </dl> 
+						<!--<ui:outputText aura:id="acctName"  value="{! item.name}"  /> --> 
+					</li>
+				</ul>
+			</aura:iteration>
+		</div>
+	</div>
+</aura:component>
