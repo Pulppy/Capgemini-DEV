@@ -19,7 +19,9 @@
 				</div>
 				<div class="slds-col float-right-width"> 
 					<p class="slds-page-header__title slds-truncate fontSmall float-right">
-						<ui:button press="{!c.previousPage}" label="Previous Page"/>
+						<aura:if isTrue="{!v.page &gt; 1}">
+							<ui:button press="{!c.previousPage}" label="Previous Page"/>
+						</aura:if>
 							({!v.page} - {!v.pages})
 						<aura:if isTrue="{!v.page &lt; v.pages}">
 							<ui:button aura:id="nextbtn" press="{!c.nextPage}" label="Next Page"/>
