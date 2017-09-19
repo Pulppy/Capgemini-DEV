@@ -2,7 +2,7 @@ public with sharing class CaseDetailCI {
 	public Case objCase;
 
 	public CaseDetailCI() {
-		// objCase = getCase();
+		objCase = getCase();
 	}
 
 	public Case getCase(){
