@@ -1,5 +1,5 @@
 <apex:page showHeader="true" sidebar="true" controller="insertHocSinh">
-	
+	// ALO
 	<apex:form >	
 	<apex:pageMessages id="msg" />
 		<apex:pageBlock title="Insert Student">
