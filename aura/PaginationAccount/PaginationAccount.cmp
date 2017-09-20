@@ -37,15 +37,14 @@
 		<!-- Row Record Start-->
 		<ul class="slds-has-dividers--top">
 			<!--Iterate account records Start -->
-            <aura:iteration items="{!v.Application}" var="item">  
-                {!item.Applicant__r.Email__c}
+            <aura:iteration items="{!v.Application}" var="item">   
                 <div class="slds-grid">
 					<!-- Content left -->
 					<div class="slds-col slds-size--5-of-12 "> 
 						<ul class="slds-has-dividers_around-space">
 							<li class="slds-item">
 								<article class="slds-tile slds-tile_board">
-									<h3 class="slds-tile__title slds-truncate fontSmall" title="Anypoint Connectors">
+									<h3 class="slds-tile__title slds-truncate fontSmall" title="{!item.Applicant__r.Name}">
 										<a href="javascript:void(0);">{!item.Applicant__r.Name}</a>
 									</h3>
 									<div class="slds-tile__detail">
@@ -53,7 +52,7 @@
 										<br/>
 										<div class="slds-grid fontSmall">
 											<div class="slds-col slds-size--1-of-2 ">  
-                                                <p class="slds-truncate" title="{!item.Applicant__r.Name}" > 
+                                                <p class="slds-truncate" title="{!item.Applicant__r.Email__c}" > 
                                                     <lightning:icon iconName="utility:email" size="x-small" />                  
                                                     <a href="javascript:void(0);"> {!item.Applicant__r.Email__c}</a>    	
                                                 </p>
@@ -76,14 +75,20 @@
 								<div class="slds-grid fontSmall">
 									<div class="slds-col slds-size--1-of-2 "> 
 										<p class="slds-truncate" title="{!item.Name}" >
-											<h3 class="slds-tile__title slds-truncate" title="Anypoint Connectors">
+											<h3 class="slds-tile__title slds-truncate" title="{!item.Name}">
 												<lightning:icon iconName="utility:phone_portrait" size="x-small" /> 
 												<a href="javascript:void(0);"> {!item.Name}</a>
 											</h3>
 										</p>
 									</div>
-									<div class="slds-col slds-size--1-of-2 "> 
-										<p  style="float:right">Hello <b> HHS</b> Coming</p>
+									<div class="slds-col slds-size--1-of-2 ">   
+                                        <p class="slds-truncate" title="{!item.LastModifiedBy.Name}" >  
+                                            Modified at 
+                                            <b> {!item.LastModifiedDate}</b> 
+                                            by {!item.LastModifiedBy.Name}
+                                        </p>
+                  
+ 
 									</div>
 								</div>
 								<div class="slds-tile__detail">
