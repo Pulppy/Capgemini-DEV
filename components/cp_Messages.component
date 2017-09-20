@@ -1,0 +1,10 @@
+<apex:component >
+    <apex:outputLabel value="{0} Please check empty field" id="emptyErrosMsg" styleClass="none"/>
+    <apex:outputLabel value="{0} max lenght of less than {1}" id="maxlenghtErrosMsg"  styleClass="none"/>
+    <apex:outputLabel value="{0} format is invalid. Please check again" id="isvalidMailMsg"  styleClass="none"/>
+    <apex:outputLabel value="{0} format is invalid. Please check again" id="isvalidNumberphoneMsg"  styleClass="none"/>
+    <apex:outputLabel value="is valid date" id="isvalidDateMsg"  styleClass="none"/>
+    <apex:outputLabel value="Currency must be less than {0}" id="isvalidCurencyMsgMin"  styleClass="none"/>
+    <apex:outputLabel value="Currency must be greater than {0}" id="isvalidCurencyMsgMax"  styleClass="none"/>
+    <apex:outputLabel value="Currency must be greater than {0} and less than {1}" id="isvalidCurencyMsgMinAndMax"  styleClass="none"/>
+</apex:component>

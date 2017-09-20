@@ -1,0 +1,3 @@
+<apex:page standardcontroller="Case" showHeader="false" sidebar="false" applyBodyTag="false" docType="html-5.0">
+	<c:C_ProgressTracker pSalesforceId="{!$CurrentPage.parameters.Id}" pBackgroundColor="#0070d2" pStepsColor="white" pStepNumbersColor="#0070d2"/> 
+</apex:page>

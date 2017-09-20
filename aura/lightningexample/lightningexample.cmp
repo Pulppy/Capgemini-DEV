@@ -1,0 +1,45 @@
+<aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="step" type="String" default="" />
+    <aura:attribute name="subject" type="String"/>
+    <aura:attribute name="comments" type="String"/>
+    <aura:attribute name="discription" type="String"/>
+    <aura:attribute name="leadId" type="String" default="{!v.recordId}" />
+    <aura:attribute name="startTime" type="DateTime" />
+    <aura:attribute name="endTime" type="DateTime" />
+    <aura:attribute name="subnotvailable" type="String"/>
+    <aura:attribute name="datenotvailable" type="DateTime" />
+    <aura:attribute name="commentsnotvailable" type="String"/>
+    
+    <div id="wrapper">
+    	<div id="header">
+        	<div class="wp-inner clearfix">
+				<lightning:button label="Cancel" onclick="{!c.submitCancel}"/>
+				<lightning:button label="Submit" onclick="{!c.submit}"/>
+            </div>
+        </div>
+        <div id ="wp-content" class="wp-content">
+            <ui:inputRadio aura:id="ryes" name="others" change="{!c.onGroup}" /> Yes <br/>
+			<ui:inputRadio aura:id="ravai" name="others" change="{!c.onGroup}" /> Unreachable / Not Available <br/>
+			<ui:inputRadio aura:id="rnot" name="others" change="{!c.onGroup}" /> Not Interested <br/>  
+        </div>
+        <!-- end radio button -->     
+        <div id ="wp-display-yes" style="display:none" class="wp-display">
+            <ui:inputText label="Subject" value="{!v.subject}" aura:id="s2subject" required="true"/><br/>
+            <ui:inputDateTime value="{!v.startTime}" label="Start Date Time" aura:id="s2starttime" required="true" class="form-control" displayDatePicker="true" /><br/>
+            <ui:inputDateTime value="{!v.endTime}" label="End Date Time" aura:id="s2endtime" required="true" class="form-control" displayDatePicker="true" /><br/>
+            <ui:inputTextArea aura:id="s2comments" value="{!v.comments}" label="Description" rows="1"/>
+        </div>
+        <!-- end display yes -->
+        <div id ="wp-display-notavailable" style="display:none" class="wp-display">
+            <ui:inputText label="Subject" value="{!v.subnotvailable}" required="true"/><br/>
+            <ui:inputDateTime label="Date / Time" aura:id="expdate" value="{!v.datenotvailable}" required="true" class="form-control" displayDatePicker="true" /><br/>
+            <ui:inputTextArea aura:id="comments" label="Description" value="{!v.commentsnotvailable}" rows="1"/>
+        </div>
+        <!-- end display notvailable -->
+        <div id ="wp-display-not" style="display:none" class="wp-display">
+            <ui:inputTextArea aura:id="discription" value="{!v.discription}" label="Description" rows="3"/>
+        </div>
+        <!-- end display not -->
+        
+	</div>	
+</aura:component>

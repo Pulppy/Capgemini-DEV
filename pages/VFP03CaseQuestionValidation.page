@@ -1,0 +1,339 @@
+<apex:page standardController="Case" extensions="VFC03CaseQuestionValidation">
+    <apex:includeScript value="{!URLFOR($Resource.jQuery_1_8_2_JS)}"/>
+    <apex:includeScript value="/support/console/24.0/integration.js"/>
+    <style>
+        .alert {
+            text-shadow: 0 1px 0 rgba(255,255,255,.2);
+            -webkit-box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 2px rgba(0,0,0,.05);
+            box-shadow: inset 0 1px 0 rgba(255,255,255,.25),0 1px 2px rgba(0,0,0,.05);
+        }
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-danger {
+            background-image: -webkit-linear-gradient(top,#f2dede 0,#e7c3c3 100%);
+            background-image: -o-linear-gradient(top,#f2dede 0,#e7c3c3 100%);
+            background-image: -webkit-gradient(linear,left top,left bottom,from(#f2dede),to(#e7c3c3));
+            background-image: linear-gradient(to bottom,#f2dede 0,#e7c3c3 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fff2dede', endColorstr='#ffe7c3c3', GradientType=0);
+            background-repeat: repeat-x;
+            border-color: #dca7a7;
+        }
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+        .alert-success {
+            background-image: -webkit-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);
+            background-image: -o-linear-gradient(top,#dff0d8 0,#c8e5bc 100%);
+            background-image: -webkit-gradient(linear,left top,left bottom,from(#dff0d8),to(#c8e5bc));
+            background-image: linear-gradient(to bottom,#dff0d8 0,#c8e5bc 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffdff0d8', endColorstr='#ffc8e5bc', GradientType=0);
+            background-repeat: repeat-x;
+            border-color: #b2dba1;
+        }
+        .alert-success {
+            color: #3c763d;
+            background-color: #dff0d8;
+            border-color: #d6e9c6;
+        }
+        .loader {
+            height: 4px;
+            width: 100%;
+            position: relative;
+            top: -2px;
+            left: 0px;
+            overflow: hidden;
+            background-color: #ddd;
+        }
+        .loader:before{
+            display: block;
+            position: absolute;
+            content: "";
+            left: -200px;
+            width: 200px;
+            height: 4px;
+            background-color: #2980b9;
+            animation: loading 2s linear infinite;
+        }
+        .input_Nid{
+            float: right;
+            height: 23px;
+            border-radius: 5px;
+            border: rgba(0, 0, 255, 0.1) solid 0.1px;
+        }
+        .btn_Nid{
+            border-radius: 5px;
+            position: absolute;
+            right: 3px;
+            top: 2px;
+        }
+        .img_loading_Nid{
+        	border-radius: 5px;
+            position: absolute;
+            right: 3px;
+            top: 5px;
+        }
+
+        @keyframes loading {
+            from {left: -200px; width: 30%;}
+            50% {width: 30%;}
+            70% {width: 70%;}
+            80% { left: 50%;}
+            95% {left: 120%;}
+            to {left: 100%;}
+        }
+    </style>
+    <script>
+        function validCase(refresh){
+               // window.parent.location.href = '/{!Case.Id }';
+               
+               if(refresh){
+                   	if (sforce.console.isInConsole()) {
+            			sforce.console.getEnclosingPrimaryTabId(closeSubtab);
+	               	}else{
+                   		window.parent.location.href = '/{!Case.Id }';
+		            }
+               }else{ 
+                    $j("input[type=checkbox]").prop('disabled', false);
+               }
+               if({!IsBlank(Case.id)}){
+                    $j('.alert-Answer').hide();
+                    $j('.loader').hide();
+               }
+               
+        }
+    	var closeSubtab = function closeSubtab(result) {
+            //Now that we have the primary tab ID, we can close it
+            var tabId = result.id;
+            console.log('tabId:'+tabId);
+            sforce.console.refreshPrimaryTabById(tabId, true, refreshSuccess);
+        };
+        var refreshSuccess = function refreshSuccess(result) {
+            //Report whether refreshing the primary tab was successful
+            if (result.success == true) {
+                console.log('Primary tab refreshed successfully');
+            } else {
+                console.log('Primary did not refresh');
+            }
+        };
+        
+        
+        $j = jQuery.noConflict();
+        $j( document ).ready(function() {
+            hideShowLoading(false);
+            loadNid();
+            if({!validateCase})
+            {
+                validateCase();
+            }
+            if (sforce.console.isInConsole()) {
+                $j('body').css('font-size', '72%'); 
+            }
+        });
+        function saveAnswers(){
+            var allAnswer = '';
+            $j( "input:checkbox" ).each(function() {
+               allAnswer += $j(this).val()+':'+$j(this).prop("checked")+';';
+             });
+            saveAnswersToServer(allAnswer);
+        }//end of saveAnswers
+        
+        function hideShowLoading(showload){
+            if(showload){
+                $j('.loader').show();
+                $j("input[type=checkbox]").prop('disabled', true);  
+            }else{
+                $j('.loader').hide();
+            }
+        }
+        
+        function displayNid(hasNid){
+        	if(hasNid){
+        		showNid();
+        	}else{
+        		loadNid();
+        	}
+        }
+        
+        function loadNid(){   
+        	$j('.btn_load_Nid').show();
+        	$j('.btn_show_Nid').hide();   
+        	$j('.btn_hide_Nid').hide();   
+            $j('.input_Nid').attr('type','password'); 
+        	$j('.img_loading_Nid').hide();             
+        }
+        
+        function showNid(){   
+        	$j('.btn_load_Nid').hide();
+        	$j('.btn_show_Nid').show();   
+        	$j('.btn_hide_Nid').hide(); 
+            $j('.input_Nid').attr('type','text');
+        	$j('.img_loading_Nid').hide();                     
+        }
+        
+        function hideNid(){   
+        	$j('.btn_load_Nid').hide();
+        	$j('.btn_show_Nid').hide();   
+        	$j('.btn_hide_Nid').show();    
+        	 $j('.input_Nid').attr('type','password'); 
+        	$j('.img_loading_Nid').hide();                 
+        }
+        function showLoadingNid(){   
+        	$j('.btn_load_Nid').hide();
+        	$j('.btn_show_Nid').hide();   
+        	$j('.btn_hide_Nid').hide();    
+        	$j('.img_loading_Nid').show();               
+        }
+    </script>
+    <apex:form styleClass="form-validation" >
+	    <apex:outputPanel layout="block" id="errMgs">
+	        <apex:pageMessages />
+	    </apex:outputPanel>
+        <apex:inputHidden value="{!Case.Type }"/>
+        <apex:inputHidden value="{!Case.SR_Sub_Type__c }"/>
+        <apex:inputHidden value="{!Case.Validation__c }"/>
+        <apex:inputHidden value="{!Case.Answers__c }"/>  
+        <apex:inputHidden value="{!Case.Origin }"/>
+        <apex:inputHidden value="{!Case.AccountId}"/>
+        <apex:inputHidden value="{!Case.Complainant__c }"/>
+       
+        <apex:actionFunction immediate="true" name="saveAnswersToServer" action="{!saveAnswer}" oncomplete="validCase({!refreshParent});" status="loading" >
+            <apex:param assignTo="{!jsonAnswer}" name="answers" value=""/>
+        </apex:actionFunction>
+        <apex:actionFunction immediate="true" name="validateCase" action="{!validatedCase}" oncomplete="validCase({!refreshParent});hideShowLoading(false);" status="loading"/>
+        <apex:actionFunction action="{!loadNationalIDFromEIP}" 
+                             name="loadNationalIDFromEIP" 
+                             reRender="nationalIDPanel,errMgs"
+                             status="loader-icon"
+                             oncomplete="displayNid({!hasNid});" />
+                             
+        <apex:actionStatus onstart="showLoadingNid();" id="loader-icon" />
+        <apex:actionStatus onstart="hideShowLoading(true);" onstop="hideShowLoading(false);" id="loading" />
+
+        <apex:outputPanel style="margin-top: 10px; font-weight: bold" layout="block" rendered="{!noQuestions }">
+            <center>No Validation Required</center>
+        </apex:outputPanel>
+        
+        <apex:outputPanel styleclass="bPageBlock brandSecondaryBrd bDetailBlock secondaryPalette" layout="block" rendered="{!Case.Validation__c && !noQuestions }">
+                <div class="pbBody">
+                    <div class="pbSubsection">
+                        <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <apex:repeat value="{!set2ColumnQuestions}" var="questionWrapper">
+                                    <tr>
+                                        <td class = "labelCol" > 
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),NOT(CONTAINS(questionWrapper.answerApiName, '.')))}">
+                                            {!If(AND(Not(ISBlANK(questionWrapper.answerApiName)), Not(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))),$ObjectType.Case.fields[questionWrapper.answerApiName].Label,questionWrapper.question1)}
+                                            </apex:outputpanel>
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),CONTAINS(questionWrapper.answerApiName, '.'))}">
+                                                {!questionWrapper.question1}
+                                            </apex:outputPanel>
+                                        </td >   
+                                        <td class = "dataCol  inlineEditWrite"  tabindex = "0" >
+                                            <div id = "" >  
+                                                    <img src = "{!if(mapQuestionToAnswers[questionWrapper.question1],'/img/checkbox_checked.gif', '/img/checkbox_unchecked.gif')}" alt = "Not Checked" width = "21" height = "16" class = "checkImg" id = "" title = "Not Checked" />
+                                            </div >  
+                                        </td >
+                                        
+                                        <td class = "labelCol" >  
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),NOT(CONTAINS(questionWrapper.answerApiName, '.')))}">
+                                            {!If(AND(Not(ISBlANK(questionWrapper.answerApiName)), Not(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))),$ObjectType.Case.fields[questionWrapper.answerApiName].Label,questionWrapper.question1)}
+                                            </apex:outputpanel>
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),CONTAINS(questionWrapper.answerApiName, '.'))}">
+                                                {!questionWrapper.question1}
+                                            </apex:outputPanel>
+                                        </td >   
+                                        <td class = "dataCol col02 inlineEditWrite"  tabindex = "0" >
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),NOT(CONTAINS(questionWrapper.answerApiName, '.')))}">
+                                                <apex:outputfield value="{!caseAnswer[questionWrapper.answerApiName]}" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)), NOT(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName))))}" />
+                                                <apex:outputPanel rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)), CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))}">
+                                                    <input type="password" value="{!nationalNumber}" readOnly="readOnly" />
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                            
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),CONTAINS(questionWrapper.answerApiName, '.'))}">
+                                                <apex:outputfield rendered="{!caseAnswer[LEFT(questionWrapper.answerApiName,FIND('.',questionWrapper.answerApiName)-1)]  != null}"  value="{!caseAnswer[LEFT(questionWrapper.answerApiName, FIND('.',questionWrapper.answerApiName)-1)][RIGHT(questionWrapper.answerApiName, LEN(questionWrapper.answerApiName) - FIND('.',questionWrapper.answerApiName))]}"/>
+                                            </apex:outputPanel>
+                                        </td > 
+                                    </tr>                                   
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </apex:outputPanel>
+        
+        <apex:outputPanel styleclass="bPageBlock brandSecondaryBrd bEditBlock secondaryPalette" layout="block"  rendered="{!!Case.Validation__c && !noQuestions }">
+             
+    <div class="loader"></div>
+                <div class="pbBody">
+                    <div class="pbSubsection">
+                        <!-- <div class="alert-Answer alert alert-success">Valid Case</div> -->
+                        <table class="detailList" border="0" cellpadding="0" cellspacing="0">
+                            <tbody>
+                                <apex:repeat value="{!set2ColumnQuestions}" var="questionWrapper">
+                                    <tr>
+                                        <td class="labelCol">
+                                            
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),NOT(CONTAINS(questionWrapper.answerApiName, '.')))}">
+                                            {!If(AND(Not(ISBlANK(questionWrapper.answerApiName)), Not(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))),$ObjectType.Case.fields[questionWrapper.answerApiName].Label,questionWrapper.question1)}
+                                            </apex:outputpanel>
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),CONTAINS(questionWrapper.answerApiName, '.'))}">
+                                                {!questionWrapper.question1}
+                                            </apex:outputPanel>
+                                        </td>
+                                        <td class="dataCol col02">
+                                            <input id="{!questionWrapper.question1}" onchange="saveAnswers()" class="{!If(AND(Not(ISBlANK(questionWrapper.answerApiName)), Not(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))),questionWrapper.answerApiName,'nationalid')}" name="{!questionWrapper.question1}" type="checkbox" value="{!questionWrapper.question1}"/>
+                                        </td>
+                                        <td class = "labelCol" >
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),NOT(CONTAINS(questionWrapper.answerApiName, '.')))}">
+                                                {!If(AND(Not(ISBlANK(questionWrapper.answerApiName)), Not(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))),$ObjectType.Case.fields[questionWrapper.answerApiName].Label,questionWrapper.question1)}
+                                            </apex:outputPanel>
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),CONTAINS(questionWrapper.answerApiName, '.'))}">
+                                                {!questionWrapper.question1}
+                                            </apex:outputPanel>
+                                        </td >   
+                                        <td class = "dataCol">
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),NOT(CONTAINS(questionWrapper.answerApiName, '.')))}">
+                                                <apex:outputfield value="{!caseAnswer[questionWrapper.answerApiName]}" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)), NOT(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName))))}" />
+                                                <apex:outputPanel Id="nationalIDPanel" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)), CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))}">
+                                                    <div style="width:173px;position: relative;">
+                                                        <img class="img_loading_Nid" src="/img/loading.gif"/>                                                                             
+                                                        <input type="password" readonly="readonly" value="{!nationalNumber}" class="input_Nid"  readOnly="readOnly" />
+                                                        <input type="button" class="btn btn_Nid btn_load_Nid" value="show" isShow="false" onclick="loadNationalIDFromEIP();"/>
+                                                        <input type="button" class="btn btn_Nid btn_show_Nid" value="show" isShow="false" onclick="hideNid();"/>
+                                                        <input type="button" class="btn btn_Nid btn_hide_Nid" value="hide" isShow="false" onclick="showNid();"/>
+                                                    </div>
+                                                </apex:outputPanel>
+                                            </apex:outputPanel>
+                                            
+                                            <apex:outputPanel layout="none" rendered="{!AND(Not(ISBlANK(questionWrapper.answerApiName)),CONTAINS(questionWrapper.answerApiName, '.'))}">
+                                                
+                                                <apex:outputfield rendered="{!caseAnswer[LEFT(questionWrapper.answerApiName,FIND('.',questionWrapper.answerApiName)-1)]  != null}" 
+                                                      value="{!caseAnswer[LEFT(questionWrapper.answerApiName, FIND('.',questionWrapper.answerApiName)-1)][RIGHT(questionWrapper.answerApiName, LEN(questionWrapper.answerApiName) - FIND('.',questionWrapper.answerApiName))]}"
+                                                />
+                                            </apex:outputPanel>
+                                        </td >
+                                             <script>
+                                                if({!mapQuestionToAnswers[questionWrapper.question1]}){
+                                                    $j(".{!If(AND(Not(ISBlANK(questionWrapper.answerApiName)), Not(CONTAINS('nationalid',LOWER(questionWrapper.answerApiName)))),questionWrapper.answerApiName,'nationalid')}").prop('checked','checked');
+                                                }
+                                            </script>
+                                        
+                                    </tr>
+                                </apex:repeat>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+        </apex:outputPanel> 
+    </apex:form>
+    
+    
+    
+</apex:page>

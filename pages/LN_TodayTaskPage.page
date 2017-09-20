@@ -1,0 +1,27 @@
+<apex:page >
+    <apex:includeScript value="/lightning/lightning.out.js" />
+    <apex:includeLightning />  
+    <div id="LN_TodayTask"></div>    
+    <apex:includeScript value="/canvas/sdk/js/publisher.js" />
+    <script>
+        $Lightning.use("c:Custom_Links", function() {
+            $Lightning.createComponent(
+                "c:LN_TodayTask",
+                {},
+                "LN_TodayTask",
+                function(cmp) {
+                });
+            });
+    </script>
+    <style>
+body {
+    margin: 0px;
+    padding: 0px;
+}        
+    </style>
+
+    <apex:pageBlock title="My Content" >
+        {!$User.UITheme}
+    </apex:pageBlock>
+
+</apex:page>

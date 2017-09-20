@@ -1,0 +1,52 @@
+<aura:component controller="CTRL_ApplicantSubScription" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global">
+    <aura:attribute name="applicant" type="Account"
+                           default="{ 'sobjectType': 'Account'}"/>
+   	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+	<div aria-labelledby="applicantForm">    
+      <!-- BOXED AREA -->
+      <fieldset class="slds-box slds-theme--default slds-container--small">            
+        <!-- CREATE NEW EXPENSE FORM -->
+        <form class="slds-form--stacked">    
+          Test save
+         <div class="slds-form-element slds-is-required">
+                <div class="slds-form-element__control">
+                    <ui:inputText aura:id="fistName" label="First Name"
+                                  class="slds-input"
+                                  labelClass="slds-form-element__label"
+                                  value="{!v.applicant.FirstName}"
+                                  required="true"/>
+         </div>
+             
+         </div>
+    
+         <div class="slds-form-element slds-is-required">
+              <div class="slds-form-element__control">
+                  <ui:inputText aura:id="lastName" label="Last Name"
+                      class="slds-input"
+                      labelClass="slds-form-element__label"
+                      value="{!v.applicant.LastName }"
+                      required="true"/>
+    
+              </div>
+          </div>
+   			
+            
+    
+          <div class="slds-form-element">
+              <ui:button label="Create Thom"
+                  class="slds-button slds-button--brand"
+                  press="{!c.saveApplicant1}"/>
+          </div>
+         
+          
+ 			<lightning:button variant="brand" label="Preview Reciept" onclick="{!c.saveApplicant1 }" />
+        </form>
+        <!-- / CREATE NEW EXPENSE FORM -->
+    
+      </fieldset>
+      <!-- / BOXED AREA -->
+    
+    </div>
+    <!-- / CREATE NEW EXPENSE -->
+
+</aura:component>

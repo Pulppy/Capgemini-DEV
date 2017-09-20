@@ -1,0 +1,28 @@
+.THIS .fl-left{
+   float: left;
+}
+.THIS .fl-right{
+   float: right;
+}
+.THIS .fl-center{
+    float: center;
+}
+.THIS .text-right{
+    text-align: right;
+}
+.THIS .text-left{
+    text-align: left;
+}
+.THIS .wp-inner{
+	width: 200px;
+    margin: 0px auto;
+}
+.THIS .wp-content{
+    width: 500px;
+    margin: 0px auto;
+}
+.THIS .wp-display{
+    width: 700px;
+    margin: 0px auto;
+  
+}

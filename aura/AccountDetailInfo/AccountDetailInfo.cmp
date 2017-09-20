@@ -1,0 +1,155 @@
+<aura:component >
+	<aura:attribute name="obj" type="Account"/> 
+	<article class="slds-card">
+        <div class="slds-card__header slds-grid">
+            <header class="slds-media slds-media_center slds-has-flexi-truncate">  
+                <h2>ACCOUNT INFOS</h2>  
+            </header>
+            <div class="slds-no-flex"> 
+                <lightning:icon iconName="action:new_opportunity" size="x-small" /> 
+            </div>
+        </div>
+        <div class="slds-card__body slds-card__body_inner body_card1"> 
+            <div class="slds-grid">
+                <div class="slds-col slds-size--1-of-3">
+                    <ul>
+                        <li>  
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-user colorIcon" aria-hidden="true"></i>
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Name}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Name}"  />
+                                </dd> 
+                            </dl>
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-birthday-cake colorIcon" aria-hidden="true"></i>
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.PersonBirthdate__c}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.PersonBirthdate__c}"  />
+                                </dd> 
+                            </dl> 
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-mobile colorIcon" aria-hidden="true"></i> 
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.MobilePhone__c}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.MobilePhone__c}"  />
+                                </dd> 
+                            </dl> 
+                        </li>
+                        <li class="margin_ellipsis"> 
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" >
+                                    <i class="fa fa-mobile colorIcon" aria-hidden="true"></i>  
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Phone}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Phone}"  /> 
+                                </dd> 
+                            </dl> 
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" >
+                                    <i class="fa fa-envelope colorIcon" aria-hidden="true"></i> 
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Tech_Person_Email__c}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Tech_Person_Email__c}"  /> 
+                                </dd> 
+                            </dl> 
+                        </li>
+                    </ul>
+                </div>
+                <div class="slds-col slds-size--1-of-3">
+                    <ul>
+                        <li>
+                            <h2 style="text-align: right;margin-right:5px"> {!v.obj.Age__c}  <ui:outputText aura:id="acctName"  value="{!v.obj.MaritalStatus__c}"  /> </h2>
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" >
+                                    <i class="fa fa-snowflake-o colorIcon" aria-hidden="true"></i> 
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Gender__c}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Gender__c}"  />
+                                </dd> 
+                            </dl>  
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-home colorIcon" aria-hidden="true"></i> 
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Address_line_1__c }">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Address_line_1__c }"  /> 
+                                </dd> 
+                            </dl> 
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-building colorIcon" aria-hidden="true"></i>
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Address_line_2__c }">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Address_line_2__c }"  />
+                                </dd> 
+                            </dl>  
+                        </li>
+                        <li class="margin_ellipsis">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-phone colorIcon" aria-hidden="true"></i>  
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.VIP_flag__c}">
+                                    <ui:outputCheckbox value="{!v.obj.VIP_flag__c}"/>
+                                </dd> 
+                            </dl>  
+                        </li>
+                    </ul>
+                </div>
+                <div class="slds-col slds-size--1-of-3">
+                    <ul class="slds-has-dividers_around-space">
+                        <li class="slds-item">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                   <i class="fa fa-briefcase colorIcon" aria-hidden="true"></i> 
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Gender__c}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Gender__c}"  />
+                                </dd> 
+                            </dl>  
+                        </li>
+                        <li class="slds-item">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-calendar-check-o colorIcon" aria-hidden="true"></i>  
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.Expected_Premium_Payment__c }">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.Expected_Premium_Payment__c }"  />
+                                </dd> 
+                            </dl>   
+                        </li>
+                        <li class="slds-item">
+                            <dl class="slds-list_inline">
+                                <dt class="slds-item_label slds-text-color_weak slds-truncate" title="First Label">
+                                    <i class="fa fa-link colorIcon" aria-hidden="true">
+                                    <a href="">View Survey</a>
+                                    </i>  
+                                </dt>
+                                <dd class="slds-item_detail slds-truncate" title="{!v.obj.MaritalStatus__c}">
+                                    <ui:outputText aura:id="acctName"  value="{!v.obj.MaritalStatus__c}"  />
+                                </dd> 
+                            </dl> 
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </article>
+    
+</aura:component>

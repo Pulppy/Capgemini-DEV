@@ -1,0 +1,591 @@
+<!-- 
+--------------------------------------------------------------------------------------
+-- - Name          : ICF_EditSurveyRulesVFPage
+-- - Author        : aazafrar 
+-- - Description   : VF Page included in SurveyManagerPage
+--
+-- Maintenance History:  
+-- 
+-- Date         Name  Version  Remarks 
+-- -----------  ----  -------  -------------------------------------------------------
+-- 18-08-2015   AA    1.0     Initial version
+--------------------------------------------------------------------------------------
+--> 
+<apex:page standardcontroller="ICF_MasterRules__c" extensions="ICF_EditSurveyRulesVFPageCtrl" tabStyle="ICF_Survey__c" sidebar="false" showheader="false">
+
+    <apex:includeScript value="{!URLFOR($Resource.ICF_jquery192, '/js/jquery-1.8.3.js')}"  />
+    <apex:includeScript value="{!URLFOR($Resource.ICF_jquery192, '/js/jquery-ui-1.9.2.custom.min.js')}" />
+    <apex:includeScript value="{!URLFOR($Resource.ICF_jqueryLoadMask, '/jquery.loadmask.min.js')}"  />
+    <apex:stylesheet value="{!URLFOR($Resource.ICF_jquery192, '/css/jquery-ui-1.9.2.custom.min.css')}"  />   
+    <apex:stylesheet value="{!URLFOR($Resource.ICF_jqueryLoadMask, '/jquery.loadmask.css')}"  /> 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" /> 
+     
+    <script type="text/javascript">
+       var $j = jQuery.noConflict();
+       $j(document).ready(function(){      
+            
+            /************************************************
+            * Create the accordion control
+            *************************************************/
+            $j( "#accordion" ).accordion({
+                collapsible : true,
+                heightStyle: "content",
+                active: 1/*,
+                activate: function( event, ui ) {
+                    $j("#accordion2").accordion("activate", false);
+                }*/
+            });
+            
+             $j( "#accordion2" ).accordion({
+                collapsible : true,
+                heightStyle: "content",
+                active: false,
+                activate: function( event, ui ) {                
+                    if(parseInt($j(this).accordion( "option", "active" )) >= 0) 
+                        $j("#accordion").accordion("activate", false);
+                }
+            });  
+            
+            /************************************************
+            * Dialog to Edit Records from dataTables
+            *************************************************/
+            $j("[id$='dialogUpdateRecords']").dialog({
+                open: function() {
+                    //$j('.ui-dialog-titlebar').css({"padding":"4px"});
+                },
+                autoOpen: false,
+                width: 750,
+                resizable: false,
+                minHeight:"auto",
+                modal: true,
+                position: { my: "top", at: "top", of: window}
+            });    
+            
+            /************************************************
+            * Reset input text after adding new records
+            *************************************************/           
+            $j("[id*='AddBtn']").click(function() {
+                $j(this).closest(".detailList").find(":input[type='text']").each(function() {
+                    //console.log('input value:'+$j(this).val());
+                    if($j(this).parent().hasClass("lookupInput") == false) {
+                        $j(this).val('');
+                    }
+                });
+            }); 
+            
+            /************************************************
+            * initialize the events after loading data in Datatables
+            *************************************************/
+            init();
+            
+       }); //end ready     
+       
+       function init() {        
+            //console.log('passe in init');         
+            /************************************************
+            * Edit action on apex dataTables
+            *************************************************/
+            $j("[id$='updateRecord']").click( function(event) {
+                setRecordToUpdateID($j(this).parent().find("[id$='idRecord']").text(), $j(this).parent().find("[id$='typeRecord']").text(),'{!pageModel}', $j(this).parent().find("[id$='actionTypeObject']").text());    
+                maskUI();
+                //maskUIComp();
+                $j("[id$='dialogUpdateRecords']").dialog("open");               
+            }); 
+            
+            unMaskUI();
+            unMaskUIComp();
+            
+        }
+        
+        /************************************************
+        * close popup containing the component
+        *************************************************/
+         function closeComponent() {
+            //console.log('pass in closePopup ddd');
+            if($j("[id*='displayMsgComp']").text() != null && $j("[id*='displayMsgComp']").text().length == 0) {
+                $j("[id$='dialogUpdateRecords']").dialog("close");              
+            }               
+            //***javascript method declared in VF Page that calling this component***/
+            init();             
+        }
+        
+        function doNothing() {
+            //console.log('passe in doNothing');
+            init();
+            return null;
+        }   
+        
+        function unMaskUI() {
+            $j("#accordion").unmask();
+        }  
+        
+        function maskUI() {
+            $j("#accordion").mask('{!$Label.LABS_SF_Wait}');
+        }  
+        
+        function hideBusinessObj1(processVal){
+            if(processVal.toLowerCase() == '{!processEligibility}'){ 
+                $j(".ObjectReferenceCls1").prop('disabled', false);//parent().parent().show();
+            }else{
+                $j(".ObjectReferenceCls1").prop('disabled', true);//parent().parent().hide();   
+                $j(".ObjectReferenceCls1").val('');      
+            }
+        }     
+    </script>
+    <style>
+       
+       .tableStyle {
+            text-align: left; 
+        }
+        .cmdBtnStyle {
+            font-size: 0.8em !important;
+            float: right;
+        }
+        .dialogUpdateRecords {
+            display: none;
+        }
+        
+        .loadmask-msg div {
+            font:bold 11px tahoma, arial, helvetica, sans-serif !important;
+            /*z-index: 9000 !important;*/
+        }
+        
+        img.helpOrb
+        {
+          vertical-align: bottom;
+        }
+        
+    </style>
+    
+    <apex:PageMessages id="displayMsg"/>
+    <apex:form id="editRules">  
+       
+    <apex:pageBlock >
+        <div id="accordion">
+        
+         <h3>{!$Label.LABS_SF_RuleSetEdit}</h3>
+         <div>
+         <apex:PageMessages id="displayMsgRS"/> 
+            <apex:actionRegion >
+                <apex:pageBlockSection columns="2" >                                                
+                        <!-- <apex:inputField value="{!ICF_MasterRules__c.Process__c}" required="true" />  -->            
+                        <apex:inputField value="{!ICF_MasterRules__c.Description__c}" style="width:300px;" />                   
+                        <apex:inputField value="{!ICF_MasterRules__c.Active__c}" />
+                        <!-- <apex:outputField value="{!MasterRules__c.OwnerId}" />  -->
+                        
+                        <apex:commandButton id="AddBtnRuleSet" onclick="maskUI();" action="{!editRuleSet}" value="{!$Label.LABS_SF_AddRuleSet}" reRender="createdRuleSets, displayMsgRS" styleClass="cmdBtnStyle" oncomplete="init();"/>                
+                </apex:pageBlockSection>
+            </apex:actionRegion>
+                
+            <apex:actionRegion >
+                <apex:pageblockSection columns="1">             
+                    <apex:outputpanel id="createdRuleSets">
+                      <apex:pageBlockTable value="{!listRuleSetWrap}" var="rs" rendered="{!IF((listRuleSetWrap.size > 0), true, false)}" styleClass="tableStyle">
+                        <apex:column headerValue="{!$Label.LABS_SF_Action}" width="5%">
+                            <apex:commandLink type="image/png" action="{!deleteRuleSet}" rerender="createdRuleSets, createdMasterRule, createdCriteria, createdActions, displayMsgRS" onclick="if(!confirm('{!$Label.LABS_SF_Confirm}')){return false;} else maskUI();" oncomplete="doNothing();">
+                                <apex:image value="{!$Resource.ICF_ICON_Delete}" title="Delete" />
+                                <apex:param name="ruleSetId" value="{!rs.Id}" assignTo="{!ruleSetId}"/>
+                            </apex:commandLink>&nbsp;<apex:outputLink id="updateRecord" value="#">
+                                <apex:image value="{!$Resource.ICF_ICON_Edit}" title="Edit" /> 
+                            </apex:outputLink>    
+                            <apex:outPutText id="idRecord" value="{!rs.Id}" style="display:none;" />
+                            <apex:outPutText id="typeRecord" value="RuleSetsObj" style="display:none;" />                                            
+                        </apex:column>
+                        <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.RuleSet__c.Label}" >
+                              <apex:outputText value="{!rs.name}" />
+                        </apex:column>     
+                        <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Description__c.Label}" >
+                              <apex:outputText value="{!rs.description}" />
+                        </apex:column> 
+                        <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Active__c.Label}" >
+                              <apex:image value="{!$Resource.ICF_ICON_Checked}" rendered="{!rs.active}" />
+                              <apex:image value="{!$Resource.ICF_ICON_UnChecked}" rendered="{!(!rs.active)}" />
+                        </apex:column>                                         
+                    </apex:pageBlockTable>
+                     <apex:pageBlockTable value="{!null}" var="v" rendered="{!IF((listRuleSetWrap.size > 0), false, true)}">
+                        <apex:column headerValue="{!$Label.LABS_SF_NoRecords}" />                      
+                    </apex:pageBlockTable>              
+                </apex:outputpanel>
+                </apex:pageblockSection>
+            </apex:actionRegion>
+        </div>
+        
+         <h3>{!$Label.LABS_SF_MasterRuleEdit}</h3>
+         <div>
+            <apex:PageMessages id="displayMsgMR"/>
+             <apex:actionRegion >
+                <apex:pageBlockSection columns="2" >                        
+                    <apex:inputField value="{!ICF_MasterRules__c.RuleSet__c}" required="true" />
+                    <apex:pageblocksectionitem >
+                        <apex:outputLabel value="{!$ObjectType.ICF_MasterRules__c.fields.Process__c.Label}" />
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                       
+                        <apex:selectList value="{!ICF_MasterRules__c.Process__c}" onchange="hideBusinessObj1(this.value);" size="1" >
+                            <apex:selectOptions value="{!ProcessList}"/>
+                        </apex:selectList>
+                        </apex:outputPanel>                     
+                    </apex:pageblocksectionitem>                          
+                    <apex:pageblocksectionitem >
+                        <apex:outputLabel value="{!$ObjectType.ICF_MasterRules__c.fields.sObject__c.Label}" />
+                        <apex:outputPanel layout="block" styleClass="requiredInput">
+                        <apex:outputPanel layout="block" styleClass="requiredBlock"/>                       
+                        <apex:selectList value="{!ICF_MasterRules__c.sObject__c}" size="1" >
+                            <apex:selectOptions value="{!MrSObjList}"/>
+                        </apex:selectList>
+                        </apex:outputPanel>                     
+                    </apex:pageblocksectionitem>
+                    <apex:inputField value="{!ICF_MasterRules__c.ConditionLogic__c}" required="false" style="width:300px" />
+                    <apex:inputField value="{!ICF_MasterRules__c.Select__c}" required="true" style="width:235px;" rendered="{!(!isMREvent)}" />                        
+                     <apex:inputField value="{!ICF_MasterRules__c.ObjectReference__c}" styleClass="ObjectReferenceCls1" style="width:300px;" rendered="{!(!isMREvent)}"  /> 
+                    <apex:inputField value="{!ICF_MasterRules__c.Description__c}" style="width:300px;" />                     
+                    <apex:inputField value="{!ICF_MasterRules__c.Active__c}" />                    
+                    <apex:commandButton id="AddBtnMasterRule" onclick="maskUI();" action="{!editMasterRule}" value="{!$Label.LABS_SF_AddMasterRule}" reRender="createdMasterRule, displayMsgMR" styleClass="cmdBtnStyle" oncomplete="init();"/>                                                                              
+                            
+                    <Script>             
+                         hideBusinessObj1('none');            
+                    </script>                  
+                </apex:pageBlockSection>
+                </apex:actionRegion>
+                
+                <apex:actionRegion >
+                <apex:pageblockSection columns="1" >
+                    <apex:outputpanel id="createdMasterRule">                   
+                      <apex:pageBlockTable value="{!listMasterRuleWrap}" var="mr" rendered="{!IF((listMasterRuleWrap.size > 0), true, false)}" styleClass="tableStyle">
+                            <apex:column headerValue="{!$Label.LABS_SF_Action}" width="5%">
+                                <apex:commandLink type="image/png" action="{!deleteMasterRule}" rerender="createdMasterRule, createdCriteria, createdActions, displayMsgMR" onclick="if(!confirm('{!$Label.LABS_SF_Confirm}')){return false;} else maskUI();" oncomplete="doNothing();">
+                                    <apex:image value="{!$Resource.ICF_ICON_Delete}" title="Delete" />
+                                    <apex:param name="masterRuleId" value="{!mr.Id}" assignTo="{!masterRuleId}" />
+                                </apex:commandLink>&nbsp;<apex:outputLink id="updateRecord" value="#">
+                                    <apex:image value="{!$Resource.ICF_ICON_Edit}" title="Edit" />
+                                </apex:outputLink>    
+                                <apex:outPutText id="idRecord" value="{!mr.Id}" style="display:none;" />
+                                <apex:outPutText id="typeRecord" value="MasterRuleSobj" style="display:none;" /> 
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Name.Label}" >
+                                  <apex:outputText value="{!mr.name}" />
+                            </apex:column>   
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Process__c.Label}" >
+                                  <apex:outputText value="{!mr.process}" />
+                            </apex:column>     
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.sObject__c.Label}" >
+                                  <apex:outputText value="{!mr.sObj}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Select__c.Label}" rendered="{!(!isMREvent)}" >
+                                  <apex:outputText value="{!mr.relationship}" />
+                            </apex:column> 
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.ObjectReference__c.Label}" rendered="{!(!isMREvent)}" >
+                                  <apex:outputText value="{!mr.objectSelect}" />
+                            </apex:column> 
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.ConditionLogic__c.Label}" >
+                                  <apex:outputText value="{!mr.cLogic}" />
+                            </apex:column>                            
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.RuleSet__c.Label}" >
+                                  <apex:outputText value="{!mr.ruleSet}" />
+                            </apex:column>
+                             <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Description__c.Label}" style="text-align:center" >
+                                <apex:outputPanel rendered="{!if(mr.description != '', true, false)}">                                      
+                                    <apex:image id="detailsImg" value="{!$Resource.ICF_ICON_Details}" title="{!mr.description}" style="cursor:text"/>                                   
+                                 </apex:outputPanel>                                  
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Active__c.Label}" >
+                                  <apex:image value="{!$Resource.ICF_ICON_Checked}" rendered="{!mr.active}" />
+                                  <apex:image value="{!$Resource.ICF_ICON_UnChecked}" rendered="{!(!mr.active)}" />
+                            </apex:column>                                         
+                        </apex:pageBlockTable>
+                         <apex:pageBlockTable value="{!null}" var="v" rendered="{!IF((listMasterRuleWrap.size > 0), false, true)}">
+                            <apex:column headerValue="{!$Label.LABS_SF_NoRecords}" />                      
+                        </apex:pageBlockTable>
+                    </apex:outputpanel>                 
+                </apex:pageblockSection>                                                                                        
+            </apex:actionRegion>
+        </div>
+         
+         <h3>{!$Label.LABS_SF_CriteriaEdit}</h3>
+         <div>
+            <apex:PageMessages id="displayMsgCR"/>
+            <apex:actionRegion >
+            <apex:pageBlockSection columns="2" >
+                <apex:inputField value="{!Criteria.MasterRule__c}" />
+                <br />              
+                <!-- <apex:inputField value="{!Criteria.Process__c}" required="true" />  -->             
+                <apex:inputField value="{!Criteria.sObject__c}" required="true" rendered="{!isMREvent}" />
+                <apex:inputField value="{!Criteria.Select__c}" rendered="{!isMREvent}" style="width:235px;" />                  
+                <apex:inputField value="{!Criteria.fields__c}" required="true" style="width:235px;" /> 
+                <apex:outputPanel rendered="{!(!isMREvent)}" >
+                    <br />
+                </apex:outputPanel>                              
+                <apex:inputField value="{!Criteria.Operator__c}" required="true" />
+                <apex:outputPanel rendered="{!(!isMREvent)}" >
+                    <br />
+                </apex:outputPanel>
+                <apex:pageblocksectionitem >
+                    <apex:outputPanel >
+                        <apex:outputLabel value="{!$ObjectType.ICF_DetailRule__c.fields.Value__c.Label}" />
+                        <c:ICF_DisplayHelpTextComponent helpText="{!$ObjectType.ICF_DetailRule__c.fields.Value__c.InlineHelpText}"/>&nbsp;
+                    </apex:outputPanel>
+                    <apex:inputField value="{!Criteria.Value__c}" required="true" style="width:235px;" />
+                </apex:pageblocksectionitem>               
+                <apex:inputField value="{!Criteria.Description__c}" style="width:300px;" />     
+                <apex:commandButton id="AddBtnCriteria" onclick="maskUI();"  action="{!editCriteria}" value="{!$Label.LABS_SF_AddCriteria}" reRender="createdCriteria, displayMsgCR" styleClass="cmdBtnStyle" oncomplete="init();"/>                                        
+            </apex:pageBlockSection>
+            </apex:actionRegion>
+            
+            <apex:actionRegion >
+                <apex:pageblockSection columns="1" >
+                    <apex:outputpanel id="createdCriteria">                 
+                      <apex:pageBlockTable value="{!listCriteriaWrap}" var="dr" rendered="{!IF((listCriteriaWrap.size > 0), true, false)}" styleClass="tableStyle">
+                            <apex:column headerValue="{!$Label.LABS_SF_Action}" width="5%">
+                                <apex:commandLink type="image/png" action="{!deleteCriteria}" rerender="createdCriteria, displayMsgCR" onclick="if(!confirm('{!$Label.LABS_SF_Confirm}')){return false;} else maskUI();" oncomplete="doNothing();">
+                                    <apex:image value="{!$Resource.ICF_ICON_Delete}" title="Delete" />
+                                    <apex:param name="criteriaId" value="{!dr.Id}" assignTo="{!criteriaId}" />
+                                </apex:commandLink>&nbsp;<apex:outputLink id="updateRecord" value="#">
+                                    <apex:image value="{!$Resource.ICF_ICON_Edit}" title="Edit" />
+                                </apex:outputLink>    
+                                <apex:outPutText id="idRecord" value="{!dr.Id}" style="display:none;" />
+                                <apex:outPutText id="typeRecord" value="CriteriaSobj" style="display:none;" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.Number__c.Label}" >
+                                  <apex:outputText value="{!dr.num}" />
+                            </apex:column>     
+                            <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.sObject__c.Label}" rendered="{!if(pageModel == 'EVENT', true, false)}">
+                                  <apex:outputText value="{!dr.sObj}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.Select__c.Label}" rendered="{!if(pageModel == 'EVENT', true, false)}">
+                                  <apex:outputText value="{!dr.relationship}" />
+                            </apex:column> 
+                            <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.fields__c.Label}" >
+                                  <apex:outputText value="{!dr.field}" />
+                            </apex:column>
+                             <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.Operator__c.Label}" >
+                                  <apex:outputText value="{!dr.operator}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.Value__c.Label}" >
+                                  <apex:outputText value="{!dr.value}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_DetailRule__c.fields.Description__c.Label}" style="text-align:center" >
+                                <apex:outputPanel rendered="{!if(dr.description != '', true, false)}">                                      
+                                    <apex:image id="detailsImg" value="{!$Resource.ICF_ICON_Details}" title="{!dr.description}" style="cursor:text"/>                                   
+                                  </apex:outputPanel>                                  
+                            </apex:column>
+                            <apex:column headerValue="{!$Label.LABS_SF_MasterRuleName}" >
+                                  <apex:outputText value="{!dr.masterRule}" />&nbsp;
+                                  <apex:image id="infoImg" value="{!$Resource.ICF_ICON_INFO}" title="{!dr.MRInfo}" />
+                            </apex:column>                                         
+                        </apex:pageBlockTable>
+                         <apex:pageBlockTable value="{!null}" var="v" rendered="{!IF((listCriteriaWrap.size > 0), false, true)}">
+                            <apex:column headerValue="{!$Label.LABS_SF_NoRecords}" />                      
+                        </apex:pageBlockTable>
+                    </apex:outputpanel>                 
+                </apex:pageblockSection>                                                                                        
+            </apex:actionRegion>            
+        </div>
+        </div>
+        
+       
+        <apex:OutputPanel id="actionsPanel" rendered="{!if(isMREvent, true, false)}" layout="none">
+        <div id="accordion2">
+        <h3>{!$Label.LABS_SF_ActionEdit}</h3>
+         <div>
+            <apex:PageMessages id="displayMsgAC"/>
+            <apex:actionRegion >
+            <apex:pageBlockSection columns="2" >
+                <apex:inputField value="{!Action.MasterRule__c}" required="true" /> 
+                <br />          
+                <apex:inputField value="{!Action.Name}" required="true" />
+                <apex:pageblocksectionitem >
+                    <apex:outputLabel value="{!$ObjectType.ICF_Action__c.fields.Type__c.Label}" />
+                    <apex:actionRegion >
+                        <apex:inputField value="{!Action.Type__c}" required="true" >
+                            <apex:actionSupport event="onchange" rerender="newRecordRT" /> 
+                        </apex:inputField>
+                    </apex:actionRegion>
+                </apex:pageblocksectionitem>               
+                <apex:inputField value="{!Action.Message__c}" style="width:300px;" />
+                <apex:pageblocksectionitem >
+                    <apex:outputLabel value="{!$ObjectType.ICF_Action__c.fields.sObject__c.Label}" />
+                    <apex:actionRegion >
+                        <apex:inputField value="{!Action.sObject__c}" >
+                            <apex:actionSupport event="onchange" rerender="newRecordRT" /> 
+                        </apex:inputField>
+                    </apex:actionRegion>
+                </apex:pageblocksectionitem>
+                <apex:pageblocksectionitem >
+                    <apex:outputLabel value="{!$ObjectType.ICF_Action__c.fields.FieldSet__c.Label}" />
+                    <apex:actionRegion >
+                        <apex:inputField value="{!Action.FieldSet__c }" >
+                            <apex:actionSupport event="onchange" rerender="createdFieldSets, createdFieldTemplates" oncomplete="init();" />
+                        </apex:inputField>
+                    </apex:actionRegion>
+                </apex:pageblocksectionitem> 
+                <apex:pageblocksectionitem >
+                    <apex:outputLabel value="{!$ObjectType.ICF_Action__c.fields.RTDevName__c.Label}" />
+                    <apex:actionRegion >
+                        <apex:outputPanel id="newRecordRT">
+                        <apex:selectList value="{!Action.RTDevName__c}" size="1" >
+                            <apex:selectOptions value="{!RtList}"/>
+                        </apex:selectList>
+                        </apex:outputPanel>
+                    </apex:actionRegion>
+                </apex:pageblocksectionitem>                 
+                <apex:commandButton id="AddBtnAction" onclick="maskUI();" action="{!editAction}" value="{!$Label.LABS_SF_AddAction}" reRender="createdActions, displayMsgAC" styleClass="cmdBtnStyle" oncomplete="init();"/>                                        
+            </apex:pageBlockSection>
+            </apex:actionRegion> 
+            
+            <apex:actionRegion >
+                <apex:pageblockSection columns="1" >
+                    <apex:outputpanel id="createdActions">                  
+                      <apex:pageBlockTable value="{!listActionWrap}" var="ac" rendered="{!IF((listActionWrap.size > 0), true, false)}" styleClass="tableStyle">
+                            <apex:column headerValue="{!$Label.LABS_SF_Action}" width="5%">
+                                <apex:commandLink type="image/png" action="{!deleteAction}" rerender="createdActions, displayMsgAC" onclick="if(!confirm('{!$Label.LABS_SF_Confirm}')){return false;} else maskUI();" oncomplete="doNothing();">
+                                    <apex:image value="{!$Resource.ICF_ICON_Delete}" title="Delete" />
+                                    <apex:param name="actionId" value="{!ac.Id}" assignTo="{!actionId}" />
+                                </apex:commandLink>&nbsp;<apex:outputLink id="updateRecord" value="#">
+                                    <apex:image value="{!$Resource.ICF_ICON_Edit}" title="Edit" />
+                                </apex:outputLink>    
+                                <apex:outPutText id="idRecord" value="{!ac.Id}" style="display:none;" />
+                                <apex:outPutText id="typeRecord" value="ActionSobj" style="display:none;" />
+                                <apex:outPutText id="actionTypeObject" value="{!ac.sObj}" style="display:none;" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_Action__c.fields.Name.Label}" >
+                                  <apex:outputText value="{!ac.name}" />
+                            </apex:column>   
+                            <apex:column headerValue="{!$ObjectType.ICF_Action__c.fields.Type__c.Label}" >
+                                  <apex:outputText value="{!ac.type}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_Action__c.fields.Message__c.Label}" style="text-align:center">                                  
+                                  <apex:outputPanel rendered="{!if(ac.message != '', true, false)}">                                    
+                                    <apex:image id="detailsImg" value="{!$Resource.ICF_ICON_Details}" title="{!ac.message}" style="cursor:text"/>                                   
+                                 </apex:outputPanel> 
+                            </apex:column>     
+                            <apex:column headerValue="{!$ObjectType.ICF_Action__c.fields.sObject__c.Label}" >
+                                  <apex:outputText value="{!ac.sObj}" />
+                            </apex:column> 
+                            <apex:column headerValue="{!$ObjectType.ICF_Action__c.fields.RTDevName__c.Label}" >
+                                  <apex:outputText value="{!ac.recordType}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_Action__c.fields.FieldSet__c.Label}" >
+                                  <apex:outputText value="{!ac.fieldSet}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_MasterRules__c.fields.Name.Label}" >
+                                  <apex:outputText value="{!ac.masterRule}" />
+                            </apex:column>                                         
+                        </apex:pageBlockTable>
+                         <apex:pageBlockTable value="{!null}" var="v" rendered="{!IF((listActionWrap.size > 0), false, true)}">
+                            <apex:column headerValue="{!$Label.LABS_SF_NoRecords}" />                      
+                        </apex:pageBlockTable>
+                    </apex:outputpanel>                 
+                </apex:pageblockSection>                                                                                        
+            </apex:actionRegion>
+        </div>
+        
+        <h3>{!$Label.LABS_SF_FieldSetEdit}</h3>
+         <div>
+           <!--<apex:PageMessages id="displayMsgFS"/>
+            <apex:ActionRegion >
+            <apex:pageBlockSection columns="2" >                
+                <apex:inputField value="{!FieldSet.Name}" required="true" />                
+                <apex:inputField value="{!FieldSet.sObject__c}" required="true" />      
+                <apex:commandButton id="AddBtnFieldSet" onclick="maskUI();" action="{!editFieldSet}" value="{!$Label.LABS_SF_AddFieldSet}" reRender="createdFieldSets, displayMsgFS" styleClass="cmdBtnStyle" oncomplete="init();"/>                                
+            </apex:pageBlockSection>
+            </apex:ActionRegion> -->
+            
+            <apex:actionRegion >
+                <apex:pageblockSection columns="1" >
+                    <apex:outputpanel id="createdFieldSets">                    
+                      <apex:pageBlockTable value="{!listFieldSetWrap}" var="fs" rendered="{!IF((listFieldSetWrap.size > 0), true, false)}" styleClass="tableStyle">
+                            <apex:column headerValue="{!$Label.LABS_SF_Action}" width="5%">
+                                <!--<apex:commandLink value="{!$Label.LABS_SF_Delete}" action="{!deleteFieldSet}" rerender="createdFieldSets, displayMsgFS" onclick="if(!confirm('{!$Label.LABS_SF_Confirm}')){return false;} else maskUI();" oncomplete="doNothing();">
+                                    <apex:param name="fieldSetId" value="{!fs.Id}" assignTo="{!fieldSetId}" />
+                                </apex:commandLink>|&nbsp;--> 
+                                 <apex:outputLink id="updateRecord" value="#">
+                                    <apex:image value="{!$Resource.ICF_ICON_Edit}"  title="Edit" />
+                                 </apex:outputLink>  
+                                <apex:outPutText id="idRecord" value="{!fs.Id}" style="display:none;" />
+                                <apex:outPutText id="typeRecord" value="FieldSetSobj" style="display:none;" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_Field_Set__c.fields.Name.Label}" >
+                                  <apex:outputText value="{!fs.name}" />
+                            </apex:column>   
+                            <apex:column headerValue="{!$ObjectType.ICF_Field_Set__c.fields.sObject__c.Label}" >
+                                  <apex:outputText value="{!fs.sObj}" />
+                            </apex:column>                                         
+                        </apex:pageBlockTable>
+                         <apex:pageBlockTable value="{!null}" var="v" rendered="{!IF((listFieldSetWrap.size > 0), false, true)}">
+                            <apex:column headerValue="{!$Label.LABS_SF_NoRecords}" />                      
+                        </apex:pageBlockTable>
+                    </apex:outputpanel>                 
+                </apex:pageblockSection>                                                                                        
+            </apex:actionRegion>            
+        </div>
+        
+        <h3>{!$Label.LABS_SF_FieldTemplateEdit}</h3>
+         <div>
+         <!--<apex:PageMessages id="displayMsgFT"/>
+            <apex:ActionRegion >
+                <apex:pageBlockSection columns="2" >                
+                    <apex:inputField value="{!FieldTemplate.Name}" required="true" />               
+                    <apex:inputField value="{!FieldTemplate.Value__c}" required="true" />   
+                    <apex:inputField value="{!FieldTemplate.FieldSet__c }" required="true" />               
+                    <apex:inputField value="{!FieldTemplate.Dynamic__c}" />
+                    <apex:commandButton id="AddBtnFieldTemplate" onclick="maskUI();" action="{!editFieldTemplate}" value="{!$Label.LABS_SF_AddFieldTemplate}" reRender="createdFieldTemplates, displayMsgFT" styleClass="cmdBtnStyle" oncomplete="init();"/>                                        
+                </apex:pageBlockSection>
+            </apex:ActionRegion>-->
+            
+            <apex:actionRegion >
+                <apex:pageblockSection columns="1" >
+                    <apex:outputpanel id="createdFieldTemplates">                   
+                      <apex:pageBlockTable value="{!listFieldTemplateWrap}" var="ft" rendered="{!IF((listFieldTemplateWrap.size > 0), true, false)}" styleClass="tableStyle">
+                            <apex:column headerValue="{!$Label.LABS_SF_Action}" width="5%">
+                                <!--<apex:commandLink value="{!$Label.LABS_SF_Delete}" action="{!deleteFieldTemplate}" rerender="createdFieldTemplates, displayMsgFT" onclick="if(!confirm('{!$Label.LABS_SF_Confirm}')){return false;} else maskUI();" oncomplete="doNothing();">
+                                    <apex:param name="fieldTemplateId" value="{!ft.Id}" assignTo="{!fieldTemplateId}" />
+                                </apex:commandLink>|&nbsp;-->
+                                <apex:outputLink id="updateRecord" value="#">
+                                    <apex:image value="{!$Resource.ICF_ICON_Edit}"  title="Edit" />
+                                </apex:outputLink>   
+                                <apex:outPutText id="idRecord" value="{!ft.Id}" style="display:none;" />
+                                <apex:outPutText id="typeRecord" value="FieldTemplateSobj" style="display:none;" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_FieldTemplate__c.fields.Name.Label}" >
+                                  <apex:outputText value="{!ft.fieldName}" />
+                            </apex:column>   
+                            <apex:column headerValue="{!$ObjectType.ICF_FieldTemplate__c.fields.Value__c.Label}" >
+                                  <apex:outputText value="{!ft.fieldValue}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_FieldTemplate__c.fields.Dynamic__c.Label}" >
+                                  <apex:inputCheckBox value="{!ft.dynamic}" disabled="true"/>
+                            </apex:column>                          
+                            <apex:column headerValue="{!$ObjectType.ICF_Field_Set__c.fields.sObject__c.Label}" >
+                                  <apex:outputText value="{!ft.sObj}" />
+                            </apex:column>
+                            <apex:column headerValue="{!$ObjectType.ICF_Field_Set__c.fields.Name.Label}" >
+                                  <apex:outputText value="{!ft.fieldSet}" />
+                            </apex:column>                                             
+                        </apex:pageBlockTable>
+                         <apex:pageBlockTable value="{!null}" var="v" rendered="{!IF((listFieldTemplateWrap.size > 0), false, true)}">
+                            <apex:column headerValue="{!$Label.LABS_SF_NoRecords}" />                      
+                        </apex:pageBlockTable>
+                    </apex:outputpanel>                 
+                </apex:pageblockSection>                                                                                        
+            </apex:actionRegion>         
+    </div>
+    </div>
+    </apex:OutputPanel>
+              
+    </apex:pageBlock>
+
+     <apex:actionFunction name="setRecordToUpdateID" rerender="EditSurveyRulesComponent"  immediate="true" oncomplete="unMaskUI();">
+        <apex:param name="param1" assignTo="{!recordToEdit}" value="" />
+        <apex:param name="param2" assignTo="{!recordTypeToEdit}" value="" />   
+        <apex:param name="param3" assignTo="{!pageModelComp}" value="" /> 
+        <apex:param name="param4" assignTo="{!actionTypeObject}" value="" />    
+     </apex:actionFunction>
+     
+    </apex:form>
+    
+    <apex:outputPanel id="dialogUpdateRecords" layout="block" styleClass="dialogUpdateRecords" title="Edit Record" >
+        <apex:outputPanel id="EditSurveyRulesComponent">
+            <c:ICF_EditSurveyRulesComponent rid="{!recordToEdit}" proctype="{!pageModel}" rtype="{!recordTypeToEdit}" actionSobject="{!actionTypeObject}"/> 
+        </apex:outputPanel>     
+    </apex:outputPanel>
+        
+</apex:page>
