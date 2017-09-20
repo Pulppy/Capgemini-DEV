@@ -1,3 +1,0 @@
-<design:component >
-	<design:attribute name="selectedOption" datasource="0,1,2" default="0" />
-</design:component>

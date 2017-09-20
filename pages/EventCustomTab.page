@@ -1,2 +1,0 @@
-<apex:page controller="EventCustomTabController" action="{!redirectToSomePage}" >
-</apex:page>
