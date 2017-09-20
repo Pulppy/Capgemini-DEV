@@ -1,2 +1,0 @@
-FirstName,LastName,Email__c,Fax_Country_Code__c,Fax_Number__c,Mobile_Number_Country_Code__c,Mobile_Number__c,Landline_Number_Country_Code__c,Landline_Number__c,Office_Number_Country_Code__c,Office_Number__c,Address_line_1__c,Address_line_2__c,Address_line_3__c,Address_line_4__c,Preferred_Contact_Method__c,Phone
-Molly,Parker,mollypaker@test.com,Hong Kong +852,12345,Hong Kong +852,5342321134,Hong Kong +852,4252422,Hong Kong +852,334555,35/F One Pacific Place,"88 Queensway, Central",Hong Kong,,Email,12345678
