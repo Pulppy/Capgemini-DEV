@@ -1,0 +1,7 @@
+<aura:component controller="CTRL_CallScriptNoOption" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,force:lightningQuickAction" access="global" >
+    <aura:attribute name="leadId" type="String"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}" />
+    <aura:attribute name="leadObject" type="Lead" default="{ 'sobjectType': 'Lead' }"/>
+	<lightning:textarea aura:id="leadDescription" name="leadDescription" label="Description" maxlength="300" value="{! v.leadObject.Description}" />
+    <aura:method name="updateLeadStatus" action="{!c.updateLeadStatus}" />
+</aura:component>

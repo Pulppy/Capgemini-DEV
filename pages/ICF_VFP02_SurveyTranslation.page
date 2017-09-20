@@ -1,0 +1,12 @@
+<apex:page standardcontroller="ICF_Survey__c" tabStyle="ICF_Survey__c" sidebar="false" showheader="false">
+	<style>
+		.editPage .bPageBlock {
+			border-top-width: 3px;
+		}
+		body {
+			background-color: #F1F1F1;
+		}
+	</style>
+	
+	<c:ICF_C01_SurveyTranslation pSurveyId="{!ICF_Survey__c.Id}"/>  
+</apex:page>

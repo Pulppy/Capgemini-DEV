@@ -1,0 +1,83 @@
+.THIS  .table_case{ 
+     height: 145px; 
+	 overflow: scroll; 
+}
+.THIS  .body_card{
+	 height: 145px; 
+}
+.THIS  .body_card1{
+	 height: 100%;
+    font-size:100%; 
+}
+.THIS  .button_case{
+	width:100%;
+    margin-top: 10%;
+} 
+.THIS  .colorIcon{ 
+    color: #1e85ed;
+} 
+.THIS .greencircle{ 
+	border: 2px solid #1fcaa0;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	text-align:center;
+}
+
+.THIS .graycircle{ 
+	border: 2px solid #d8dde6;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	text-align:center;
+}
+
+.THIS .yellowcircle{ 
+	border: 2px solid #dada00;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	text-align:center;
+}
+
+.THIS .redcircle{ 
+	border: 2px solid #ff2f2f;
+	-moz-border-radius: 10px;
+	-webkit-border-radius: 10px;
+	-ms-border-radius: 10px;
+	-o-border-radius: 10px;
+	border-radius: 50%;
+	width: 25px;
+	height: 25px;
+	text-align:center;
+}
+.THIS .margin_ellipsis{ 
+	margin-top:5px;
+	overflow:hidden;
+	text-overflow:ellipsis;
+}
+
+.THIS .overflow_policyoverivew{ 
+	overflow:hidden;
+	text-overflow:ellipsis;
+    
+}
+.THIS .marginPolicyOverview{ 
+	margin-top:10%; 
+    
+}
+.THIS .marginPolicy1{ 
+	margin-top:5%; 
+}

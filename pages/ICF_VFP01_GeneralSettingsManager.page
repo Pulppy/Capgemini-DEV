@@ -1,0 +1,41 @@
+<apex:page showHeader="false" sidebar="false" id="ICF_VFC01_GeneralSettingsManager" standardController="ICF_Survey__c" extensions="ICF_VFC01_GeneralSettingsManager">
+    <style>
+        .editPage .bPageBlock {
+            border-top-width: 3px;
+        }
+        body {
+            background-color: #F1F1F1;
+        }
+    </style>
+
+    <apex:form id="frmGeneralSettings">
+        <apex:messages />
+        <apex:pageBlock mode="edit">
+            <apex:pageBlockButtons >
+                <apex:commandButton action="{!saveConfig}" id="saveButton" value="{!$Label.LABS_SF_Save}"/>
+            </apex:pageBlockButtons>
+            
+            <apex:pageBlockSection rendered="{! MustDisplayEmailConfig }" columns="1" Title="{!$Label.LABS_SF_EmailConfig}" >               
+                <apex:inputField value="{!mSurveyConfEMail.Login__c}" />            
+                <apex:inputField value="{!mSurveyConfEMail.Password__c}" />             
+                <apex:inputField value="{!mSurveyConfEMail.Endpoint__c}" style="width:350px;" />                
+                <apex:inputField value="{!mSurveyConfEMail.Security_Token__c}" style="width:350px;" />              
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection rendered="{! MustDisplaySMSConfig }" columns="1" Title="{! $Label.LABS_SF_SMSConfig}" >  
+                <apex:inputField value="{!mSurveyConfSMS.Login__c}" />          
+                <apex:inputField value="{!mSurveyConfSMS.Password__c}" />           
+                <apex:inputField value="{!mSurveyConfSMS.Endpoint__c}" style="width:350px;" />          
+                <apex:inputField value="{!mSurveyConfSMS.Security_Token__c}" style="width:350px;" />
+            </apex:pageBlockSection>
+            
+            <apex:pageBlockSection rendered="{! MustDisplayEKOMIConfig}" columns="1" Title="{! $Label.LABS_SF_EKOMIConfiguration}" >  
+                <apex:inputField value="{!mSurveyConfEKOMI.Login__c}" />          
+                <apex:inputField value="{!mSurveyConfEKOMI.Password__c}" />           
+                <apex:inputField value="{!mSurveyConfEKOMI.Endpoint__c}" style="width:350px;" />          
+                <apex:inputField value="{!mSurveyConfEKOMI.Security_Token__c}" style="width:350px;" />
+            </apex:pageBlockSection>
+        </apex:pageBlock>
+    </apex:form>
+    
+</apex:page>

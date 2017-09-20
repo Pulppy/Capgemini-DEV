@@ -1,0 +1,234 @@
+<apex:component >
+<style>
+	.opa{
+		opacity:0.7;
+		filter:alpha(opacity=70); /* For IE8 and earlier */
+	}
+	.lookup_field{
+		padding-bottom: 1px !important;
+		height:20px !important;
+	}	
+	.popBox-title{
+		padding:10px;
+		height:25px;
+		text-align:center;
+	}
+	.popBox-button{
+		padding:10px;
+		height:25px;
+		text-align:center;
+	}
+	.popBox{
+		width:450px;
+		margin-left : -225px;
+		height:450px;
+		margin-top : -125px;
+		background-color:#f8f8f8;
+	}
+	.popBox-main{
+		width:450px;
+		height:450px;	
+		max-height:150px;
+		overflow-y: auto;
+		padding:none;
+		margin:none;		
+	}
+	table.popBox-tbl{
+		width:100%;
+		border-collapse:collapse;
+		border: 1px solid #E0E3E5;
+		background-color: #ffffff;
+	}
+	table.popBox-tbl th{
+		border: 1px solid #E0E3E5;
+	}
+	table.popBox-tbl td{
+		padding:4px 0px 4px 2px;
+		text-align:left;		
+	}
+	.hRow{
+		background-color:#f2f3f3;
+	}
+	.Hsection {
+		margin-bottom: 2px;
+    	margin-top: 15px;
+    	overflow: hidden;
+    	/*background-color :#e0e3e6;*/
+    	background-color :#cfeef8;
+    	padding: 5px 0px 5px 4px;
+    	/*border:solid 1px #afbac5;*/
+	}
+	.Hsection h3{ color:#004C93}
+	.Hsection img {
+    	height: 12px;
+    	margin-right: 4px;
+    	width: 12px;
+	}
+	.Hbutton{
+		padding: 8px 0px 10px 0px;		
+		text-align:center;
+	}
+	.grouping1{
+		position: fixed;
+		overflow: hidden;		
+		left:0px;
+		top: 0px;
+		width:100%;
+		height:100%;
+		text-align:center;
+		z-index: 50101;							
+	}
+	.trHigh{
+		background-color:#e3f3ff !important;
+	}
+	
+	.matrx-hd{
+		text-align:middle;
+		color: #333333;
+    	padding: 4px 2px 4px 5px;
+    	font-weight: bold;
+    	border: solid 1px #E0E3E5;  
+    	border-top:solid 3px #6b702b;
+    	border-right:none;  	
+    	background-color:#f2f3f3;
+    	font-size: 0.9em;
+	}
+	.matrx-td{
+		vertical-align: middle;
+		border: 1px solid #EDEDED;
+		border-width:0px 0px 1px 1px;
+    	color: #000000;
+    	padding: 4px 2px 4px 5px;
+	}
+	
+	.last-td{
+		border-right: 1px solid #EDEDED;
+	}
+	ul.tabs
+	{
+	    padding: 7px 0;
+	    font-size: 0;
+	    margin:0;
+	    list-style-type: none;
+	    text-align: left; /*set to left, center, or right to align the tabs as desired*/
+	}
+	        
+	ul.tabs li
+	{
+	    display: inline;
+	    margin: 0;
+	    margin-right:3px; /*distance between tabs*/	    
+	}
+	        
+	ul.tabs li a
+	{
+	    font: normal 12px Verdana;
+	    text-decoration: none;
+	    position: relative;
+	    z-index: 1;
+	    padding: 7px 16px;
+	    /*border: 1px solid #CCC;*/
+	    /*border: 1px solid #6b702b;*/
+	    /*border-bottom-color:#E0E3E5;*/
+	    border-bottom-color:#6b702b
+	    color: #000;
+	    /*background: #F0F0F0 url(tabbg.gif) 0 0 repeat-x;*/
+	    background-color: #F0F0F0;
+	    border-radius: 5px 5px 0 0;
+	    outline:none;
+	}
+	        
+	ul.tabs li a:visited
+	{
+	    color: #000;
+	}
+	        
+	/*ul.tabs li a:hover
+	{
+	    border: 1px solid #E0E3E5;
+	    background-color: #F0F0F0;
+	    /*background:#F0F0F0 url(tabbg.gif) 0 -36px repeat-x;*/
+	/*}*/
+	        
+	ul.tabs li.selected a
+	{
+	    /*selected tab style */
+	    position: relative;
+	    top: 0px;
+	    font-weight:bold;
+	    /*background: white;*/
+	    color:white;
+	    background-color: #6b702b;
+	    border: 1px solid #6b702b;
+	}
+	        
+	        
+	ul.tabs li.selected a:hover
+	{
+	    /*selected tab style */
+	    text-decoration: none;
+	}
+	        
+	div.tabcontent
+	{
+	    display: block;
+	}
+	
+	div.tabcontents
+	{
+	    border: 1px solid #E0E3E5;
+	    /*background-color:#FFF;*/
+	    background-color: #f2f3f3;
+	    /*border-radius: 0 2px 2px 2px;*/
+	}
+	.jq_costCol_Off{
+		display:none !important;
+	}
+	.jq_comCol_Off{
+		display:none !important;
+	}
+	.pbScroll{	
+		max-height:275px;
+		overflow-y: auto;
+	}
+	.subSectiontitle{
+		background-color:#e6e7dc;
+		padding:4px 16px;
+		margin:-5px -5px 5px -5px;
+		font-weight:13px;
+		border:none;
+	}
+	.in_size{
+		width:40px;
+	}
+	.lk_size{
+		width:60px;
+	}
+	.maxWd{
+		max-width:70px;
+		white-space:normal !important;
+	}
+	.max100Wd{
+		max-width:100px;
+		white-space:normal !important;
+		word-wrap: break-word;
+	}
+	.max-flex{
+		white-space:normal !important;
+		word-wrap: break-word;
+	}
+	.hlist{
+		word-wrap:break-word;
+		border-collapse:collapse;
+		border-color:#e0e3e6;
+		background-color:#f2f3f3;
+		width:100%;
+		border-bottom:none;
+	}
+	.hlist th{
+		border-color:#e0e3e6;
+		padding: 4px 2px 4px 5px;	
+		font-size:90%;	
+	}
+</style>
+</apex:component>

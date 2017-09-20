@@ -1,0 +1,22 @@
+<apex:page >
+    <apex:includeScript value="/lightning/lightning.out.js" />
+    <apex:includeLightning />  
+    <div id="LN_TodayTaskAndEvent"></div>    
+    <apex:includeScript value="/canvas/sdk/js/publisher.js" />
+    <script>
+        $Lightning.use("c:Custom_Links", function() {
+            $Lightning.createComponent(
+                "c:LN_TodayTaskAndEvent",
+                {},
+                "LN_TodayTaskAndEvent",
+                function(cmp) {
+                });
+            });
+    </script>
+    <style>
+body {
+    margin: 0px;
+    padding: 0px;
+}        
+    </style>
+</apex:page>

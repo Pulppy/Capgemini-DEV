@@ -1,0 +1,15 @@
+<apex:component layout="none">
+    <div id="xi-notifications" class="slds-notify_container" style="display:none;">
+        <div class="slds-notify slds-notify--alert slds-theme--error slds-theme--alert-texture" role="alert">
+            <span class="slds-assistive-text">Error</span>
+            <h2>{!$Label.ContactAdminErrMg_LF}</h2>
+            <h2 id="technical-error"></h2>
+        </div>
+    </div>
+    <script>
+        function showError(errorMessage){
+            document.getElementById("technical-error").innerHTML = errorMessage; 
+            document.getElementById("xi-notifications").style.display = 'block'; 
+        }
+    </script>
+</apex:component>

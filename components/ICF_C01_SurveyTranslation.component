@@ -1,0 +1,107 @@
+<apex:component controller="ICF_VFC02_SurveyTranslation" allowDML="true">
+    <apex:attribute name="pMustBeReloaded" description="Used to refresh the screen" type="Boolean" required="required" assignTo="{!mustBeReloaded}"/>
+    <apex:attribute name="pSurveyId" description="The survey to use" type="Id" required="required" assignTo="{!surveyId}"/>
+    
+    <apex:includeScript value="{!URLFOR($Resource.ICF_Foundation, 'js/vendor/jquery.js')}"/>
+	<apex:stylesheet value="{!URLFOR($Resource.ICF_Foundation, 'css/app.css')}"/>
+	<script>
+		var displayOrHideThrobber = function(pDisplay) {
+            if (pDisplay) {                        
+                $('html, body').animate({
+                  scrollTop: 0
+                }, 100);
+                $('#veil').show();
+            } else {
+                $('#veil').hide();                  
+            }
+        }
+		
+		var startReloadTranslationsJS = function() {
+            displayOrHideThrobber(true);
+            reloadTranslationsJS();
+		}
+
+	</script>
+	
+	
+	<div id="veil" class="veil" style="display:none;">
+        <div class="throbberContainer">
+            <apex:image url="{! URLFOR($Resource.ICF_Foundation, '/img/throbber.svg')}" />
+        </div>
+    </div>
+    <apex:form id="frmTranslate">
+
+        <apex:actionFunction name="reloadTranslationsJS" action="{!loadWrapperTranslations}" oncomplete="displayOrHideThrobber(false);" reRender="frmTranslate" />
+
+        <apex:actionFunction name="saveTranslationsJS" action="{!saveTranslation}" oncomplete="displayOrHideThrobber(false);" reRender="" />
+
+        <apex:pageBlock title="{!$Label.LABS_SF_Translation_Title}" mode="edit">
+            <apex:pageBlockButtons >
+                <apex:actionStatus id="saveStatus">
+                    <apex:facet name="start">
+                        <apex:commandButton value="{!$Label.LABS_SF_Saving}" disabled="true"/>
+                    </apex:facet>
+                    <apex:facet name="stop">
+                        <apex:commandButton action="{!saveTranslation}" value="{!$Label.LABS_SF_Save}" status="saveStatus" reRender="messagesContainer"/>
+                    </apex:facet>
+                </apex:actionStatus>
+            </apex:pageBlockButtons>
+
+            <apex:pageMessages id="messagesContainer" />
+
+            <apex:pageBlockSection title="{!$Label.LABS_SF_Language}" columns="1" >
+                <apex:pageBlockSectionItem >
+                    <apex:outputLabel value="{!$Label.LABS_SF_Language}" for="slLanguages"/>
+                    <apex:outputPanel >
+                        <apex:selectList value="{!selectedLanguage}" size="1" id="slLanguages" onchange="startReloadTranslationsJS();">
+                            <apex:selectOptions value="{! Languages }" />
+                        </apex:selectList>
+                    </apex:outputPanel>
+                </apex:pageBlockSectionItem>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection id="pbsInfos" title="{!$Label.LABS_SF_Translate_Info}" columns="2" rendered="{! !ISBLANK(translateInfos) }">
+                <apex:repeat value="{! translateInfos }" var="vTranslateInfo" id="translateInfoRepeat">
+                    <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{! vTranslateInfo.value }" />
+                        <apex:outputPanel >
+                            <apex:inputTextarea value="{! vTranslateInfo.translatedValue }" cols="50" rendered="{! vTranslateInfo.type == 'Textarea'}"/>
+                            <apex:inputText value="{! vTranslateInfo.translatedValue }" rendered="{! vTranslateInfo.type == 'InputText'}" style="width:320px"/>
+                        </apex:outputPanel>
+                    </apex:pageBlockSectionItem>                
+                </apex:repeat>
+            </apex:pageBlockSection>
+
+            <apex:pageBlockSection id="pbsQuestions" title="{!$Label.LABS_SF_Translate_Question}" columns="2" rendered="{! !ISBLANK(translateQuestions) }">
+                <apex:repeat value="{! translateQuestions }" var="translateQuestion" id="translateQuestionRepeat">
+                    
+                   <apex:pageBlockSectionItem >
+                        <apex:outputLabel value="{! translateQuestion.value }"/>
+                        <apex:inputTextarea value="{! translateQuestion.translatedValue }" cols="50"/>
+                    </apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+
+                    <apex:repeat value="{! translateQuestion.translateSubQuestions }" var="translateSubQuestion" id="translateSubQuestionRepeat">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{! translateSubQuestion.value }" />
+                            <apex:inputText value="{! translateSubQuestion.translatedValue }" style="width:320px" />
+                        </apex:pageBlockSectionItem>
+                        <apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                    </apex:repeat>
+
+                    <apex:repeat value="{! translateQuestion.translateChoices }" var="translateChoice" id="translateChoiceRepeat">
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{! translateChoice.value }" />
+                            <apex:inputText value="{! translateChoice.translatedValue }" style="width:320px" />
+                        </apex:pageBlockSectionItem>
+                    </apex:repeat>
+
+                    <apex:pageBlockSectionItem rendered="{! NOT(translateQuestion.pairNumberOfChoice) }"></apex:pageBlockSectionItem>
+                    <apex:pageBlockSectionItem ></apex:pageBlockSectionItem><apex:pageBlockSectionItem ></apex:pageBlockSectionItem>
+                
+                </apex:repeat>
+            </apex:pageBlockSection>
+
+        </apex:pageBlock>
+    </apex:form>
+</apex:component>
