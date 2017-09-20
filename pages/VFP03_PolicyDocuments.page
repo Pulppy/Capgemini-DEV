@@ -1,0 +1,23 @@
+<apex:page standardController="Policy__c" showHeader="false" standardstylesheets="false" sidebar="false" title="Documents List" >
+    <apex:includeScript value="{!$Resource.MomentJSWithLocales}"/>
+    <apex:includeScript value="/support/console/37.0/integration.js"/>
+  
+   <c:C03_GenerateListLayout wsname="RetrieveDocumentList" 
+        params="policyNumber={!Policy__c.Name}&documentClass=Policy&policyId={!Policy__c.Id}" 
+        template="Document_List_Template"/>
+
+    <script type="text/javascript">
+        function testSetTabTitle() {
+            //Set the current tab's title
+            sforce.console.setTabTitle('Documents List');//'Policy {!Policy__c.Policy_no__c} Documents');
+        }
+        var pageLoad = window.onload;
+          window.onload = function() {
+                if (pageLoad) {
+                        pageLoad();
+                }
+              testSetTabTitle();
+          }
+    </script>
+
+</apex:page>

@@ -1,0 +1,149 @@
+<!-- 
+--------------------------------------------------------------------------------------
+-- - Name          : ICF_EditSurveyRulesComponent
+-- - Author        : aazafrar 
+-- - Description   : VF Component to update a record in ICF_EditSurveyRulesVFPage
+--
+-- Maintenance History: 
+--
+-- Date         Name  Version  Remarks 
+-- -----------  ----  -------  -------------------------------------------------------
+-- 18-08-2015   AA    1.0     Initial version
+--------------------------------------------------------------------------------------
+--> 
+<apex:component controller="ICF_EditSurveyRulesComponentCtrl" allowDML="true">
+    <apex:attribute name="rid" type="String" description="N/A" assignTo="{!recordId}"/>
+    <apex:attribute name="rtype" type="String" description="N/A" assignTo="{!recordType}"/>
+    <apex:attribute name="proctype" type="String" description="N/A" assignTo="{!pageModel}"/> 
+    <apex:attribute name="actionSobject" type="String" description="N/A" assignTo="{!firstValSobject}"/> 
+    
+    <script>
+        function maskUIComp() {
+            $j("[id$='formComponent']").mask('{!$Label.LABS_SF_Wait}');
+        }           
+        function unMaskUIComp() {
+            $j("[id$='formComponent']").unmask();
+        }
+        
+        function hideBusinessObj(processVal){
+            if(processVal.toLowerCase() == '{!processEligibility}'){ 
+                $j(".ObjectReferenceCls").prop('disabled', false);//parent().parent().show();
+            }else{
+                $j(".ObjectReferenceCls").prop('disabled', true);//parent().parent().hide();   
+                $j(".ObjectReferenceCls").val('');      
+            }
+        }              
+    </script>
+
+    <apex:form id="formComponent">
+    <apex:pageBlock id="ComponentEditRecord">       
+       <apex:PageMessages id="displayMsgCompRS"/>     
+        <apex:pageBlockSection columns="1" rendered="{!IF((recordType == 'RuleSetsObj'), true, false)}" >                                               
+                <!--  <apex:inputField value="{!MasterRule.Process__c}" required="true" />-->
+                <apex:inputField value="{!MasterRule.Description__c}" style="width:300px;" />                    
+                <apex:inputField value="{!MasterRule.Active__c}" />               
+                <apex:commandButton id="SaveRuleSetBtn" onclick="maskUIComp();" action="{!updateMasterRule}" value="{!$Label.LABS_SF_SaveRuleSet}" oncomplete="closeComponent();" rerender="displayMsgCompRS, createdRuleSets" styleClass="cmdBtnStyle" />
+        </apex:pageBlockSection>
+        
+        <apex:PageMessages id="displayMsgCompMR"/>
+        <apex:pageBlockSection columns="1" rendered="{!IF((recordType == 'MasterRuleSobj'), true, false)}" >   
+            <apex:inputField value="{!MasterRule.RuleSet__c}" required="true" />
+            <apex:pageblocksectionitem >
+                <apex:outputLabel value="{!$ObjectType.ICF_MasterRules__c.fields.Process__c.Label}" />
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>                       
+                 <apex:selectList value="{!MasterRule.Process__c}" onchange="hideBusinessObj(this.value);" size="1" >
+                     <apex:selectOptions value="{!ListProcess}"/>
+                 </apex:selectList>
+                </apex:outputPanel>                     
+            </apex:pageblocksectionitem>
+            <apex:pageblocksectionitem >
+                <apex:outputLabel value="{!$ObjectType.ICF_MasterRules__c.fields.sObject__c.Label}" />
+                <apex:outputPanel layout="block" styleClass="requiredInput">
+                <apex:outputPanel layout="block" styleClass="requiredBlock"/>                       
+                 <apex:selectList value="{!MasterRule.sObject__c}" size="1" >
+                     <apex:selectOptions value="{!ListMrSObj}"/>
+                 </apex:selectList> 
+                </apex:outputPanel>                     
+            </apex:pageblocksectionitem>   
+            <apex:inputField value="{!MasterRule.Select__c}" required="true" rendered="{!if(pageModel == 'EVENT', false, true)}" style="width:230px" />
+            <apex:inputField value="{!MasterRule.ObjectReference__c}" styleClass="ObjectReferenceCls" style="width:300px;" rendered="{!if(pageModel == 'EVENT', false, true)}" />   
+            <apex:inputField value="{!MasterRule.ConditionLogic__c}" required="false" style="width:300px" />            
+            <apex:inputField value="{!MasterRule.Description__c}" style="width:300px;" />         
+            <apex:inputField value="{!MasterRule.Active__c}" />
+            <apex:commandButton id="SaveMasterRuleBtn" onclick="maskUIComp();" action="{!updateMasterRule}" value="{!$Label.LABS_SF_SaveMasterRule}" oncomplete="closeComponent();" reRender="displayMsgCompMR, createdMasterRule, createdCriteria" styleClass="cmdBtnStyle" >                
+            </apex:commandButton> 
+            <Script>             
+                 hideBusinessObj('{!MasterRule.Process__c}');            
+            </script>                                          
+        </apex:pageBlockSection> 
+        
+        <apex:PageMessages id="displayMsgCompCR"/>
+        <apex:pageBlockSection columns="1" rendered="{!IF((recordType == 'CriteriaSobj'), true, false)}" >   
+            <apex:inputField value="{!Criteria.MasterRule__c}" required="true" />
+            <!--  <apex:inputField value="{!Criteria.Process__c}" required="true" /> -->              
+            <apex:inputField value="{!Criteria.sObject__c}" required="true" rendered="{!if(pageModel == 'EVENT', true, false)}"/>
+            <apex:inputField value="{!Criteria.Select__c}" rendered="{!if(pageModel == 'EVENT', true, false)}"/>
+            <apex:inputField value="{!Criteria.fields__c}" required="true" style="width:235px;" />               
+            <apex:inputField value="{!Criteria.Operator__c}" required="true" />
+            <apex:pageblocksectionitem >
+                <apex:outputPanel >
+                    <apex:outputLabel value="{!$ObjectType.ICF_DetailRule__c.fields.Value__c.Label}" />
+                    <c:ICF_DisplayHelpTextComponent helpText="{!$ObjectType.ICF_DetailRule__c.fields.Value__c.InlineHelpText}"/>&nbsp;
+                </apex:outputPanel>
+                <apex:inputField value="{!Criteria.Value__c}" required="true" style="width:235px;" />
+            </apex:pageblocksectionitem>
+            <apex:inputField value="{!Criteria.Description__c}" style="width:300px;" />          
+            <apex:commandButton id="SaveCriteriaBtn" onclick="maskUIComp();" action="{!updateCriteria}" value="{!$Label.LABS_SF_SaveCriteria}" oncomplete="closeComponent();" reRender="displayMsgCompCR, createdCriteria" styleClass="cmdBtnStyle" />                                              
+        </apex:pageBlockSection>
+        
+        <apex:PageMessages id="displayMsgCompAC"/>        
+        <apex:pageBlockSection columns="1" rendered="{!IF((recordType == 'ActionSobj'), true, false)}" >   
+            <apex:inputField value="{!Action.MasterRule__c}" required="true" />
+            <apex:inputField value="{!Action.Name}" required="true" />
+            <apex:inputField value="{!Action.Type__c}" required="true" onchange="assignParamTypeAction(this.value)" />            
+            <apex:inputField value="{!Action.Message__c}" style="width:300px;"  />
+            <apex:inputField value="{!Action.sObject__c}" onchange="assignParamTypeObject(this.value)" />
+            <apex:pageblocksectionitem >
+                <apex:outputLabel value="{!$ObjectType.ICF_Action__c.fields.RTDevName__c.Label}" />                
+                <apex:actionRegion >
+                    <apex:selectList id="editRecordRT" value="{!Action.RTDevName__c}" size="1" >                         
+                         <apex:selectOptions value="{!opList}"/>
+                    </apex:selectList>
+                </apex:actionRegion>                                                        
+            </apex:pageblocksectionitem>
+            <apex:inputField value="{!Action.FieldSet__c }" />          
+            <apex:commandButton id="SaveActionBtn" onclick="maskUIComp();" action="{!updateAction}" value="{!$Label.LABS_SF_SaveAction}" oncomplete="closeComponent();" reRender="displayMsgCompAC, createdActions" styleClass="cmdBtnStyle" />                                             
+        </apex:pageBlockSection>
+         
+                
+        <apex:PageMessages id="displayMsgCompFS"/>
+        <apex:pageBlockSection columns="1" rendered="{!IF((recordType == 'FieldSetSobj'), true, false)}" >   
+            <apex:inputField value="{!FieldSet.Name}" required="true" />                
+            <apex:inputField value="{!FieldSet.sObject__c}" required="true" />  
+            <apex:commandButton id="SaveFieldSetBtn" onclick="maskUIComp();" action="{!updateFieldSet}" value="{!$Label.LABS_SF_SaveFieldSet}" oncomplete="closeComponent();" reRender="displayMsgCompFS, createdFieldSets, createdFieldTemplates" styleClass="cmdBtnStyle" />                                              
+        </apex:pageBlockSection>
+        
+        <apex:PageMessages id="displayMsgCompFT"/>
+        <apex:pageBlockSection columns="1" rendered="{!IF((recordType == 'FieldTemplateSobj'), true, false)}" >   
+            <apex:inputField value="{!FieldTemplate.FieldSet__c }" required="true" />
+            <apex:inputField value="{!FieldTemplate.Name}" required="true" style="width:235px;" />               
+            <apex:inputField value="{!FieldTemplate.Value__c}" required="true" style="width:235px;" />                           
+            <apex:inputField value="{!FieldTemplate.Dynamic__c}" /> 
+            <apex:commandButton id="SaveFieldTemplateBtn" onclick="maskUIComp();" action="{!updateFieldTemplate}" value="{!$Label.LABS_SF_SaveFieldTemplate}" oncomplete="closeComponent();" reRender="displayMsgCompFT, createdFieldTemplates" styleClass="cmdBtnStyle" />                                             
+        </apex:pageBlockSection>
+        <apex:pageBlockSection columns="1"> 
+            <apex:actionStatus id="saveStatus" startText="Please wait..." style="float:right" />
+        </apex:pageBlockSection>
+    </apex:pageBlock>
+    
+    <apex:actionFunction name="assignParamTypeAction" action="{!setRTSelectList}" reRender="editRecordRT" immediate="true">      
+      <apex:param name="typeAction" assignTo="{!typeAction}" value=""/>
+    </apex:actionFunction>
+    <apex:actionFunction name="assignParamTypeObject" action="{!setRTSelectList}" reRender="editRecordRT" immediate="true">      
+      <apex:param name="typeObject" assignTo="{!typeObject}" value=""/>
+    </apex:actionFunction> 
+     
+ </apex:form>
+ 
+</apex:component>

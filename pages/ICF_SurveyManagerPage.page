@@ -1,0 +1,226 @@
+<apex:page standardController="ICF_Survey__c" extensions="ICF_SurveyManagerController" showHeader="true">
+    <apex:stylesheet value="{!$Page.ICF_labs_survey_css}" />
+   
+   
+     <apex:includeScript value="{!URLFOR($Resource.ICF_Foundation, 'js/vendor/jquery.js')}"/>
+
+    
+    
+    <style>
+    .activeTab {
+        background-color: #f1f1f1; color:black; background-image:none; cursor: pointer; font-weight: bold; font-size: 1em;
+    }
+    .inactiveTab { 
+        background-color: white; color:black; background-image:none; cursor: pointer; font-weight: normal;
+    }
+    .selectTitle {
+        font-weight: bold;
+    }
+    .arrowL {    
+       
+        background: transparent url("{!URLFOR($Resource.ICF_Foundation, 'img/combobox_arrows_sprite.gif')}") no-repeat;
+       
+        
+        width: 24px;
+        height: 20px;
+        margin: 0 2px;
+        background-position: left -60px;
+    }
+    .arrowR {
+        background: transparent url("{!URLFOR($Resource.ICF_Foundation, 'img/combobox_arrows_sprite.gif')}") no-repeat;
+       
+        width: 24px;
+        height: 20px;
+        margin: 0 2px;
+        background-position: left 0px;
+    }
+    </style>
+    <script>
+        var $j = jQuery.noConflict();
+        var mStatus = '';
+        function warningOnArchive() {
+            if (mStatus == "{!$Label.LABS_SF_Status_Archived}") {
+                var vAnswer = confirm("{!$Label.LABS_SF_Archive_Warning}");
+                if (vAnswer == true) {
+                    saveSurveyJS();
+                } 
+            } else {
+                saveSurveyJS();
+            }
+        }
+        function setStatus(pValue) {
+            mStatus = pValue;
+        }
+        function addLanguages() {
+            selectLanguageJS();            
+        }
+        function removeLanguages() {
+            unselectLanguageJS();            
+        }
+    </script>
+    <div id="labs_container">
+    <h2><apex:outputtext value="{!ICF_Survey__c.Name}" id="surveyTitle" /></h2>
+    </div>
+    <!-- Create Tab panel --> 
+    <apex:tabPanel switchType="client" selectedTab="name2" id="SurveyTabPanel" tabClass="activeTab" inactiveTabClass="inactiveTab">
+        
+        <apex:tab label="{!$Label.LABS_SF_Survey_Infos}" name="name2" id="tabTwo">
+            <apex:form id="frmSurveyInfos">
+               
+                <apex:pageBlock mode="edit" rendered="{! NOT(IsArchived) }">
+                    <apex:pageMessages id="messagesContainer" />
+                    <apex:pageBlockButtons >
+                        <apex:actionFunction action="{!saveSurvey}" name="saveSurveyJS" />
+                        <apex:commandButton onclick="warningOnArchive(); return false;" id="saveButton" value="{!$Label.LABS_SF_Save}"/>
+                    </apex:pageBlockButtons>
+                    <apex:pageBlockSection columns="1" >
+                        <apex:inputField value="{!ICF_Survey__c.Name}" />
+                        <apex:selectList id="surveyStatus" value="{!ICF_Survey__c.Survey_Status__c}" size="1" onchange="setStatus(this.value);">
+                            <apex:selectOptions value="{!StatusPL}"/>
+                        </apex:selectList>                        
+                        <apex:inputField value="{!ICF_Survey__c.Expiration_Date__c}" required="true" />
+                        <apex:selectList value="{!ICF_Survey__c.Survey_Delivery_Channel__c}" size="1">
+                        <apex:selectOptions value="{!DeliveryChannelsPL}"/>
+                        </apex:selectList>
+                        <!-- Start: TCF_Feb182017: Added new logic -->
+                        <apex:inputCheckbox value="{!ICF_Survey__c.Send_To_EKOMI__c}">
+                       <apex:selectOptions value="{!Checkboxvalue}"/>
+                        </apex:inputCheckbox>
+                        <!-- End: TCF_Feb182017: Added new logic -->
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{!$ObjectType.ICF_Survey__c.fields.Available_Languages__c.Label}" for=""/>
+                            <apex:outputPanel layout="block" id="opAvailableLanguages">
+                                <apex:actionRegion >
+                                    <apex:actionFunction action="{!selectLanguage}" name="selectLanguageJS" reRender="opAvailableLanguages,surveyLanguage,messagesContainer">
+                                    </apex:actionFunction>
+                                    <apex:actionFunction action="{!unselectLanguage}" name="unselectLanguageJS" reRender="opAvailableLanguages,surveyLanguage,messagesContainer">
+                                    </apex:actionFunction>
+
+                                    <div style="float:left;text-align:center;">
+                                        <apex:selectList value="{!languagesNotSelectedInProgress}" size="5" multiselect="true" id="notSelectedLanguages">
+                                            <apex:selectOptions value="{!languagesNotSelectedSO}" />
+                                        </apex:selectList>
+                                    </div>
+                                    <div style="float: left; width: 50px; text-align: center; padding: 0.2em 0 0.2em 0;">
+                                        
+                                        <div style="padding: 0.1em 0 0.1em 0;">
+                                            <apex:commandLink onclick="addLanguages();return false;" id="select">
+                                                <img src="/s.gif" alt="Remove" class="arrowR" title="Remove"/>
+                                            </apex:commandLink>
+                                        </div>
+                                        <div style="padding: 0.1em 0 0.1em 0;">
+                                            <apex:commandLink onclick="removeLanguages();return false;" id="unselect">
+                                                <img src="/s.gif" alt="Remove" class="arrowL" title="Remove"/>
+                                            </apex:commandLink>
+                                        </div>
+                                    </div>
+                                    <div style="float:left;text-align:center;">
+                                        <apex:selectList value="{!languagesSelectedInProgress}" size="5" style="float:left;" multiselect="true" id="selectedLanguages">
+                                            <apex:selectOptions value="{!languagesSelectedSO}" />
+                                        </apex:selectList>
+                                    </div>
+                                </apex:actionRegion>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:selectList value="{!ICF_Survey__c.Survey_Language__c}" size="1" id="surveyLanguage">
+                            <apex:selectOptions value="{!LanguagesPL}"/>
+                        </apex:selectList>
+
+                        <apex:pageblocksectionitem >                        
+                            <apex:outputLabel for="sitesSList" value="Select Site " /> 
+                            <apex:actionRegion >
+                                <apex:selectList value="{!surveySite}" multiselect="false" id="sitesSList" required="true"  size="1">
+                                    <apex:selectOptions value="{!sitesPicklist}"/>
+                                    <apex:actionSupport event="onchange" rerender="linkToSend"/>            
+                                </apex:selectList>
+                            </apex:actionRegion>
+                        </apex:pageblocksectionitem>
+                        <apex:pageblocksectionitem >
+                            <apex:outputLabel for="linkToSend" value="{! $ObjectType.ICF_Survey__c.fields.URL__c.Label }" />
+                            <apex:outputText id="linkToSend" value="{!surveyURLBase + surveyURL}" /> 
+                        </apex:pageblocksectionitem>                        
+                        <apex:inputField value="{!ICF_Survey__c.Url_Expiring_Date__c}" required="true" style="width:50px;" />
+                        <apex:inputField value="{!ICF_Survey__c.Survey_email_reminder__c}" required="false" style="width:50px;" />
+
+
+                        <apex:inputtextArea value="{!ICF_Survey__c.Survey_Header__c}" cols="50" rows="5"/>
+                        <apex:inputtextArea value="{!ICF_Survey__c.Survey_Description__c}" cols="50" rows="5"/>
+                        <apex:inputtextArea value="{!ICF_Survey__c.Survey_Footer__c}" cols="50" rows="5"/>
+                        <apex:inputtextArea value="{!ICF_Survey__c.Thank_You_Text__c}" cols="50" rows="5"/>
+                        <apex:inputtextArea value="{!ICF_Survey__c.SMS_Template__c}" cols="50" rows="5"/>
+                        <apex:inputtextArea value="{!ICF_Survey__c.Reminder_SMS_Template__c}" cols="50" rows="5"/>                                                 
+                        <apex:inputtext value="{!ICF_Survey__c.EmailTemplate__c}" style="width:320px"/> 
+                        <apex:inputtext value="{!ICF_Survey__c.Reminder_EmailTemplate__c}" style="width:320px"/>      
+
+
+                        <!-- Uncomment to provide the ability to change the css
+                        <apex:inputtextArea value="{!Survey__c.Survey_Container_CSS__c}" cols="50" rows="5"/>
+                        -->                        
+                        <apex:pageBlockSectionItem >
+                            <apex:outputLabel value="{! $Label.LABS_SF_Logo } " for="file"/>
+                            <apex:inputFile value="{!document.body}" filename="{!document.name}" contentType="{!document.contentType}" id="file" accept="image/*"/>
+                        </apex:pageBlockSectionItem>
+
+                        <apex:pageBlockSectionItem rendered="{!ICF_Survey__c.Survey_Logo__c != null}">
+                            <apex:outputLabel value="{! $Label.LABS_SF_Logo_Preview } " />
+                            <apex:outputPanel >
+                                <apex:image id="imgLogo" value="{!logoUrl}" style="float:left; max-width: 250px; max-height: 60px;" /> &nbsp;
+                                <div style="float:left;"><apex:commandButton action="{!deleteLogo}" value="{!$Label.LABS_SF_Logo_Delete}" /></div>
+                            </apex:outputPanel>
+                        </apex:pageBlockSectionItem>
+
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+                <!-- Viex mode -->
+                <apex:pageBlock rendered="{! IsArchived }">
+                    <apex:pageBlockSection columns="1" >
+                        <apex:outputField value="{!ICF_Survey__c.Name}" />
+                        <apex:outputField value="{!ICF_Survey__c.Survey_Status__c}" />
+                        <apex:outputField value="{!ICF_Survey__c.Expiration_Date__c}" />
+                        <apex:outputField value="{!ICF_Survey__c.Survey_Delivery_Channel__c}" />
+                        <apex:outputField value="{!ICF_Survey__c.Survey_Language__c}" />
+                        <apex:outputField value="{!ICF_Survey__c.Survey_Header__c}"/>
+                        <apex:outputField value="{!ICF_Survey__c.Survey_Description__c}"/>
+                        <apex:outputField value="{!ICF_Survey__c.Survey_Footer__c}" />
+                        <apex:outputField value="{!ICF_Survey__c.Thank_You_Text__c}" />
+                        <apex:outputField value="{!ICF_Survey__c.SMS_Template__c}"/>
+                        <apex:outputField value="{!ICF_Survey__c.Email_Template__c}"/>
+                    </apex:pageBlockSection>
+                </apex:pageBlock>
+            </apex:form>    
+        </apex:tab>    
+
+        <apex:tab label="{!$Label.LABS_SF_Edit_Questions}" name="name4" id="tabFour" rendered="{! NOT(IsArchived) }">
+            <apex:iframe src="ICF_SurveyPage?id={!ICF_Survey__c.Id}" scrolling="True" id="editSurvey" />                           
+        </apex:tab>
+    
+        <apex:tab label="{!$Label.LABS_SF_Translate}" name="name5" id="tabFifth" rendered="{! NOT(IsArchived) }">
+            <apex:iframe src="ICF_VFP02_SurveyTranslation?Id={!ICF_Survey__c.Id}" scrolling="True" />   
+        </apex:tab>
+        
+        <apex:tab label="{!$Label.LABS_SF_Preview}" name="name1" id="tabOne">
+            <c:ICF_viewShareSurveyComponent pSurveyId="{!ICF_Survey__c.Id}" id="shareComp" />
+            <apex:actionSupport event="ontabenter" rerender="shareComp"/>            
+        </apex:tab>
+
+        <apex:tab label="{!$Label.LABS_SF_Results}" name="name3" id="tabThree">
+            <c:ICF_viewSurveyResultsComponent pSurveyId="{!ICF_Survey__c.Id}" />
+            <apex:actionSupport event="onclick" rerender="tabThree"/>            
+        </apex:tab>
+        
+        <apex:tab label="Edit Rules ELIG-EXCL" name="name6" id="tabSix">
+             <apex:iframe id="editSurveyRulesEE" src="ICF_EditSurveyRulesVFPage?surveyId={!ICF_Survey__c.Id}&pageModel=EE" scrolling="True" />        
+        </apex:tab>
+        
+        <apex:tab label="Edit Rules EVENT" name="name7" id="tabSeven">
+             <apex:iframe id="editSurveyRulesEV" src="ICF_EditSurveyRulesVFPage?surveyId={!ICF_Survey__c.Id}&pageModel=EVENT" scrolling="True" />        
+        </apex:tab>
+        
+        <apex:tab label="General Settings" name="name8" id="tabEight">
+             <apex:iframe id="generalSettings" src="ICF_VFP01_GeneralSettingsManager?id={!ICF_Survey__c.Id}" scrolling="True" />        
+        </apex:tab>
+           
+    </apex:tabPanel>
+    
+</apex:page>

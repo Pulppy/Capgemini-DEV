@@ -1,0 +1,64 @@
+<apex:page standardController="Account" showHeader="false" sidebar="false" showQuickActionVfHeader="false" standardStylesheets="false">
+    <apex:includeScript value="/support/console/22.0/integration.js"/>
+    <apex:includeScript value="/lightning/lightning.out.js" />
+    <apex:includeLightning />  
+    <div id="topSideBarInfo"></div>    
+    <apex:includeScript value="/canvas/sdk/js/publisher.js" />
+    <script>
+var global_LINK = '';
+var global_Name = '';    
+function g_open_link(url, id, name) {
+	if (sforce.console.isInConsole()) {
+		global_LINK = url;
+		global_Name = '[' + id + ']';
+        if (name != null) {
+            global_Name = name;
+		}
+		goToOpenSubtab();
+	} else {
+		window.open('/'+link,'_blank');
+	}
+}
+
+function goToOpenSubtab() {
+	sforce.console.getEnclosingPrimaryTabId(openSubtab);
+}
+
+var openSubtab = function openSubtab(result) {
+	//Now that we have the primary tab ID, we can open a new subtab in it
+	var primaryTabId = result.id;
+	sforce.console.openSubtab(primaryTabId , global_LINK, true, global_Name, null, openSuccess, global_Name+'Subtab');
+};
+
+var openSuccess = function openSuccess(result) {
+	//Report whether we succeeded in opening the subtab
+	if (result.success == true) {
+		//console.log('subtab successfully opened');
+	} else {
+		//console.log('subtab cannot be opened');
+		alert("We are sorry! Subtab can not be opened!");
+	}
+};    
+    </script>
+	<script>
+    	var objId = "{!Account.Id}";
+		$Lightning.use("c:LN_TopSideBarInfoApp", function() {
+            $Lightning.createComponent(
+                "c:LN_TopSideBarInfo",
+                { "objectId": objId},
+                "topSideBarInfo",
+                function(cmp) {
+                });
+            });    
+	</script>
+    <style>
+body {
+	background: rgb(236, 239, 244) !important;   
+    margin: 0px !important;
+    padding: 0px 0px 0px 0px !important;
+    /*min-width: 1280px !important;*/
+    width: 1280px !important;
+    x-overflow: scroll;
+}
+    </style>
+</apex:page>

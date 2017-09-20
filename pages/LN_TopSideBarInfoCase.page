@@ -1,0 +1,27 @@
+<apex:page standardController="Case" showHeader="false" sidebar="false" showQuickActionVfHeader="false" standardStylesheets="false">
+	<apex:includeScript value="/lightning/lightning.out.js" />
+    <apex:includeLightning />  
+    <div id="topSideBarInfo"></div>    
+    <apex:includeScript value="/canvas/sdk/js/publisher.js" />
+	<script>
+    	var objId = "{!Case.Id}";
+		$Lightning.use("c:LN_TopSideBarInfoApp", function() {
+            $Lightning.createComponent(
+                "c:LN_TopSideBarInfo",
+                { "objectId": objId},
+                "topSideBarInfo",
+                function(cmp) {
+                });
+            });
+	</script>
+    <style>
+body {
+	background: rgb(236, 239, 244) !important;   
+    margin: 0px !important;
+    padding: 0px 0px 0px 0px !important;
+    /*min-width: 1280px !important;*/
+    width: 1280px !important;
+    x-overflow: scroll;
+}
+    </style>
+</apex:page>
