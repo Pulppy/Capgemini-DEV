@@ -1,7 +1,6 @@
 <aura:component controller="QuickSearch_CTRL" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
-	 <!--declare attributes--> 
-      <!--declare attributes-->
-      <!--declare attributes-->
+	<!--declare attributes--> 
+    <!--declare attributes--> 
     <aura:attribute name="selectedRecord" type="sObject" default="{}" description="Use,for store SELECTED sObject Record"/>
     <aura:attribute name="listOfSearchRecords" type="List" description="Use,for store the list of search records which returns from apex class"/>
     <aura:attribute name="SearchKeyWord" type="string"/>
@@ -51,7 +50,7 @@
         </div>
         <!--This part is for Display typehead lookup result List-->  
         <ul class="slds-listbox slds-listbox_vertical slds-dropdown slds-dropdown_fluid slds-lookup__menu slds" role="listbox">
-            <center> <ui:spinner aura:id="spinner"/> </center>
+            <center> <ui:spinner aura:id="spinner"/></center>
             <center> {!v.Message}</center>
             <aura:iteration items="{!v.listOfSearchRecords}" var="singleRec">
                 <c:customQuickSearchResult oRecord="{!singleRec}" IconName="{!v.IconName}"/>
