@@ -1,0 +1,18 @@
+<aura:component controller="Communitymainheader" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:attribute name="userinfo" type="user"/>
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
+    
+    <div class="slds-text-align_right"> 
+        <div class="slds-text-color_blue"><b>{!v.userinfo.Name}</b></div>
+        <div class="title slds-text-body_small">
+            <p>Hotline: {!v.userinfo.MobilePhone}/</p>
+            <p>{!v.userinfo.Email}</p>
+        </div>
+        <hr/>     
+    </div>
+    <div class="slds-grid slds-text-align_right">
+        <div class="slds-col"><p><lightning:icon size="x-small" iconName="utility:question"/> Aide</p></div>
+        <div class="slds-col"><p><lightning:icon size="x-small" iconName="utility:copy_to_clipboard" /> Déconnexion</p></div>
+    </div>
+	
+</aura:component>
