@@ -1,7 +1,8 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <ltng:require styles="{!$Resource.SFDCStyle}"  />
 	<aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
        	<div class="slds-section slds-is-open slds-card" > 
-            <h3 class="slds-section__title slds-theme_shade setcolorheader" >
+            <h3 class="slds-section__title slds-theme_shade sfdc-headercolor" >
                 <span class="slds-truncate slds-p-horizontal_small" title="Section Title">
                    Quick Search
                 </span>

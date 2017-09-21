@@ -5,37 +5,10 @@
 .THIS .green {
 	background-color: green;
 	color: white;
-}
-.THIS .float-right{
-	float: right;
-}
-.THIS .float-left{
-	float: left;
-}
-
-.THIS .fontSmall{
-	font-size: small;
-}
-
-.THIS .textnote{
-	float: right;
-	color: gray;
-}
-
-.THIS .boldText{
-	color:  black;
-}
-
-.THIS .float-right-width{
-	float: right;
-	width: 80%;
-	font-size: small;
-}
-
-.THIS .headerColor{
-    background-color:#1e2443 ; 
-    color: white;
-}
+} 
+.THIS .select-width{ 
+	width: 80%; 
+} 
 
 .THIS button{
 	font-size: x-small;
