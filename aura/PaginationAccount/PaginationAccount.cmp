@@ -84,7 +84,7 @@
 									<div class="slds-col slds-size--1-of-2 ">   
                                         <p class="slds-truncate" title="{!item.LastModifiedBy.Name}" >  
                                             Modified at 
-                                            <b> {!item.LastModifiedDate}</b> 
+                                            <b><ui:outputDateTime value="{!item.LastModifiedDate}" format="DD/MM/YYYY"/>  </b> 
                                             by {!item.LastModifiedBy.Name}
                                         </p>
                   
