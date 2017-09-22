@@ -19,8 +19,7 @@
     <div aura:id="searchRes" class="slds-form-element slds-lookup slds-is-close" data-select="single">
         <label class="slds-form-element__label" for="lookup-348">{!v.label}</label>
         <!--This part is for display search bar for lookup-->  
-        <div class="slds-form-element__control">
-            
+        <div class="slds-form-element__control"> 
             <div class="slds-input-has-icon slds-input-has-icon--right">
                 <lightning:icon class="slds-input__icon slds-show" iconName="utility:search" size="x-small" alternativeText="search"/> 
                 <!-- This markup is for when an record is selected -->
