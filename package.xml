@@ -2,9 +2,11 @@
 <Package xmlns="http://soap.sforce.com/2006/04/metadata">
     <types>
         <members>HomePageServiceCTRL</members>
+        <members>HomePageServiceCTRL</members>
         <members>HomePageServiceCTRL_Test</members>
         <members>QuickSearchCTRL_Test</members>
         <members>QuickSearch_CTRL</members>
+        <members>Communitymainheader</members>
         <name>ApexClass</name>
     </types>
     <types>
@@ -15,6 +17,7 @@
         <members>customQuickSearchResult</members>
         <members>selectedsObjectRecordEvent</members>
         <members>showQuickSearch</members>
+        <members>community_mainheader</members>
         <name>AuraDefinitionBundle</name>
     </types>
     <version>36.0</version>
