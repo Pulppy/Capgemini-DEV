@@ -51,7 +51,7 @@
 	
     saveApplicant: function(component, event, helper) {
         alert("create account: ");
-        var isCheckField = true;
+        /*var isCheckField = true;
         var firstName = component.find("nomApplicant").get("v.value");
         var lastName = component.find("lastApplicant").get("v.value");
         //alert("lastName: "+ lastName);
@@ -60,7 +60,7 @@
             isCheckField = false;
             component.find("nomApplicant").set("v.errors",[{message:"FirstName: please enter a value"}]);
         }
-        /*else if($A.util.isEmpty(lastName)){
+        else if($A.util.isEmpty(lastName)){
             isCheckField = false;
             component.find("lastApplicant").set("v.errors",[{message:"LastName: please enter a value"}]);
         }
@@ -73,7 +73,12 @@
         if(isValidEmail){
             isCheckField = true;
         }
-
+        var isEmptyField = helper.validateEmptyField(component, event, helper);
+        console.log("isEmptyField: "+ isEmptyField);
+        if(isValidEmail){
+            isCheckField = true;
+        }
+        
         if(isCheckField){
             alert("sdsjds");
             var applicant = component.get("v.applicant");

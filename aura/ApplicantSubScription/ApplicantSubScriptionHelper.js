@@ -73,7 +73,23 @@
     },
 
     validateEmptyField : function(component, event, helper){
-
+        var isCheckField = true;
+        var firstName = component.find("nomApplicant").get("v.value");
+        var lastName = component.find("lastApplicant").get("v.value");
+        var birthDate = component.find("inputBirthdate").get("v.value");
+        if($A.util.isEmpty(firstName)){
+            isCheckField = false;
+            component.find("nomApplicant").set("v.errors",[{message:"FirstName: please enter a value"}]);
+        }
+        else if($A.util.isEmpty(lastName)){
+            isCheckField = false;
+            component.find("lastApplicant").set("v.errors",[{message:"LastName: please enter a value"}]);
+        }
+        else if($A.util.isEmpty(birthDate)){
+            isCheckField = false;
+            component.find("inputBirthdate").set("v.errors",[{message:"BirthDate: please enter a value"}]);
+        }
+        return isCheckField;
     },
 
 
