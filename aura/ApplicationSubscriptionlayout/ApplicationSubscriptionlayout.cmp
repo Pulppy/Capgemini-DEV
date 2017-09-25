@@ -1,0 +1,20 @@
+<aura:component description="team 2" implements="forceCommunity:layout" access="global">
+    <aura:attribute name="header1" type="Aura.Component[]" />
+    <aura:attribute name="header2" type="Aura.Component[]" />
+    <aura:attribute name="navigation" type="Aura.Component[]" />
+    <aura:attribute name="container" type="Aura.Component[]" />
+    
+    <form> 
+        <div class="slds-grid slds-wrap">
+            <div class="slds-size_6-of-6">
+                {!v.header1}
+            </div>
+            <div class="slds-size_4-of-4">
+                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">{!v.navigation}</div>
+            </div> 
+            <div class="slds-size_4-of-4">
+                <div class="slds-box slds-box_x-small slds-text-align_center slds-m-around_x-small">{!v.container}</div>
+            </div> 
+        </div>
+    </form>  
+</aura:component>
