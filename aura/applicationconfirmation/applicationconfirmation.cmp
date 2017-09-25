@@ -1,4 +1,6 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" controller="CTRL_ApplicationConfirmation" >
+  <ltng:require scripts="{!$Resource.validation +  '/validationJS/validation.js'}" 
+        afterScriptsLoaded="{!c.Validation}"/>
    <aura:handler name="init" action="{!c.doInit}" value="{!this}"/>
    <aura:attribute name="app" type="Account"/>
   <div style="font-family: Arial;">
@@ -60,8 +62,8 @@
 		           </div>
                  
                 </div>
-                <div class = "slds-modal__content">
-                	<button class="slds-button slds-button_neutral" style="width: 100%;">
+                <div class = "slds-modal__content" >
+                	<button class="slds-button slds-button_neutral" style="width: 100%;" >
         				 		<span style="font-weight: bold;float: left;font-size: 15px;">Fiche adhésion </span>
         				 		<span style="float: right">
         				 			<lightning:icon iconName="utility:chevronright" class="slds-button__icon_right" size="small"  alternativeText="Indicates approval"/>
@@ -72,7 +74,7 @@
         </div>
      </div>
       <div>
-          <button class="slds-button slds-button_brand" >
+          <button class="slds-button slds-button_brand" onclick="{!c.openLoanPage}" >
               <span style="float: left">
                  <lightning:icon iconName="utility:left" class="slds-button__icon_left" size="small"  />
               </span>
@@ -94,14 +96,14 @@
         <p>Le numéro de téléphone portable et l'adresse mail de l'adhérent sont nécessaires pour la signature électronique des documents. Veuillez saisir le ou les informations manquantes ci-dessous :</p>
         <!-- <label class="slds-form-element__label" for="input-id-01">Téléphone portable</label> -->
         <div class="slds-form-element__control">
-          <ui:inputPhone aura:id="phone" label="Téléphone portable" class="field" placeholder="0123456789"  value="{!v.app.PersonMobilePhone}"/>
+          <ui:inputText aura:id="phone" maxlength="11" label="Téléphone portable" class="field" placeholder="0123456789"  value="{!v.app.PersonMobilePhone}"/>
         </div>
       <!--   <label class="slds-form-element__label" for="input-id-01">Email</label> -->
         <div class="slds-form-element__control">
           <ui:inputEmail aura:id="email" label="Email" placeholder="abc@email.com" value="{!v.app.Email__c}"/>
         </div>
-        <div style="margin-top: 15px" onclick="{!c.saveEmailPhone}">
-          <button class="slds-button slds-button_brand" style="left: 250px;" >Valider</button>
+        <div style="margin-top: 15px" >
+          <button class="slds-button slds-button_brand" style="left: 250px;" onclick="{!c.saveEmailPhone}">Valider</button>
         </div>
       </div>
     </div>

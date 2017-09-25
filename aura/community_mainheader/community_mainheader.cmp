@@ -2,17 +2,30 @@
     <aura:attribute name="userinfo" type="user"/>
     <aura:handler name="init" value="{!this}" action="{!c.doInit}"/>
     
-    <div class="slds-text-align_right"> 
-        <div class="slds-text-color_blue"><b>{!v.userinfo.Name}</b></div>
-        <div class="title slds-text-body_small">
-            <p>Hotline: {!v.userinfo.MobilePhone}/</p>
-            <p>{!v.userinfo.Email}</p>
+    <div class="slds-grid slds-wrap">
+        <div class="slds-size_4-of-6">
+            <lightning:layout horizontalAlign="space">
+                <lightning:layoutItem padding="around-small" class="slds-text-align_right slds-cs-color-blue slds-text-heading_medium">
+                    <div class="slds-grid">
+                        <div class="slds-col "> <img style="float:left" src="../resource/1506335497000/imageslogosf/images/axa-logo.png"></img></div>     
+                        <div class="slds-col slds-text-heading_small"><li class="linetext" style="list-style: none;">WebCreditor / Individual Pricing</li></div>
+                    </div>
+                </lightning:layoutItem>
+            </lightning:layout>
         </div>
-        <hr/>     
+        <div class="slds-size_2-of-6">
+            <div class="slds-text-align_right"> 
+                <div class="slds-text-color_blue"><b>{!v.userinfo.Name}</b></div>
+                <div class="title slds-text-body_small">
+                    <p>Hotline: {!v.userinfo.MobilePhone}/</p>
+                    <p>{!v.userinfo.Email}</p>
+                </div>
+                <hr/>     
+            </div>
+            <div class="slds-grid slds-text-align_right">
+                <div class="slds-col"><p><lightning:icon size="x-small" iconName="utility:question"/> Aide</p></div>
+                <div class="slds-col"><p><lightning:icon size="x-small" iconName="utility:copy_to_clipboard" /> Déconnexion</p></div>
+            </div>
+        </div>  
     </div>
-    <div class="slds-grid slds-text-align_right">
-        <div class="slds-col"><p><lightning:icon size="x-small" iconName="utility:question"/> Aide</p></div>
-        <div class="slds-col"><p><lightning:icon size="x-small" iconName="utility:copy_to_clipboard" /> Déconnexion</p></div>
-    </div>
-	
 </aura:component>
