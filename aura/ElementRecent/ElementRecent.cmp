@@ -40,5 +40,5 @@
             </aura:iteration> 
 		</div>
         <br/>
-	</div>
+	</div> 
 </aura:component>
