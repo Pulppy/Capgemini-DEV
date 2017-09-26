@@ -77,4 +77,13 @@
 			component.set("v.pages", Math.ceil(data.total / recordToDisply));
 		}));
 	},
+	actionEditApplicant: function(component, event, helper) {
+		var urlEvent = $A.get("e.force:navigateToURL");
+		urlEvent.setParams({
+			"url": '/applicantsubscription?applicantID='+event.target.id
+		});
+		urlEvent.fire();
+	},
+ 
+
 })
