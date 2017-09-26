@@ -3,7 +3,6 @@ public with sharing class HomePageServiceCTRL {
     public static ApplicantPagerWrapper fetchApplicant(Decimal pageNumber ,Integer recordToDisply) {
         Integer pageSize = recordToDisply;
         Integer offset = ((Integer)pageNumber - 1) * pageSize;
-	    //NTT
         // create a instance of wrapper class.
         ApplicantPagerWrapper obj =  new ApplicantPagerWrapper();
         // set the pageSize,Page(Number), total records and accounts List(using OFFSET)   
