@@ -1,0 +1,15 @@
+.THIS.text {
+    border-bottom: 2px solid;
+}
+.THIS.tittlepage2 {
+    display: flex;
+    flex-direction: row;
+    color: Navy;
+    font-size: 30px;
+}
+.THIS.tittlepage2:after{
+    content: "";
+    flex: 1 1;
+    border-bottom: 2px solid Navy;
+    margin: auto;
+}
