@@ -19,7 +19,6 @@
         <members>PaginationAccount</members>
         <members>QuickSearch</members>
         <members>QuickSearchResult</members>
-        <members>showQuickSearch</members>
         <members>UploadDocument</members>
         <members>applicationconfirmation</members>
         <members>community_mainheader</members>
