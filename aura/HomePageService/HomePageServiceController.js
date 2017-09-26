@@ -1,7 +1,7 @@
 ({
 	getListData : function(component, event, helper) {
         var params = event.getParam("arguments");
-        var action = component.get("c.fetchAccount");
+        var action = component.get("c.fetchApplicant");
         action.setParams({
              "pageNumber": params.page,
              "recordToDisply": params.recordToDisply

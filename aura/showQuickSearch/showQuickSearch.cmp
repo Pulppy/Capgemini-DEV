@@ -1,15 +1,20 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
     <ltng:require styles="{!$Resource.SFDCStyle}"  />
 	<aura:attribute name="selectedLookUpRecord" type="sObject" default="{}"/>
+    <article class="slds-card ">
+		<div >
+			<lightning:button class="sfdc-headercolor buttonNavigation slds-text-heading_medium" onclick="{!c.actionNewApplicant}"  ><lightning:icon iconName="utility:adduser" size="small" />{!$Label.c.Create_Application}</lightning:button>
+		</div>
+	</article>
        	<div class="slds-section slds-is-open slds-card" > 
             <h3 class="slds-section__title slds-theme_shade sfdc-headercolor" >
                 <span class="slds-truncate slds-p-horizontal_small" title="Section Title">
-                   Quick Search
+                   {!$Label.c.Quick_Search_lbl}
                 </span>
             </h3> 
         <div aria-hidden="false" class="slds-section__content">
             <div class="slds-form-element__control inputField">
-                <c:customQuickSearch objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}"/>
+                <c:QuickSearch objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}"/>
             </div>  
             <div class="slds-no-flex">
                 <center> <lightning:button class="button" label="Search" /> </center> <br/>

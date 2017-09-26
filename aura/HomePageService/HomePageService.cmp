@@ -1,4 +1,4 @@
-<aura:component controller="HomePageServerCTRL">
+<aura:component controller="HomePageService_CTRL">
 	<aura:method name="getListData" action="{!c.getListData}">
         <aura:attribute name="page" type="integer"/>
         <aura:attribute name="recordToDisply" type="integer"/>

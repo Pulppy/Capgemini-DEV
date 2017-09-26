@@ -1,44 +1,44 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global"   >
-    <ltng:require styles="{!$Resource.SFDCStyle}"  />
+		<ltng:require styles="{!$Resource.SFDCStyle}"  />
 	<aura:attribute name="accList" type="account[]" default="[]" /> 
 	<aura:handler name="init" value="{!this}" action="{!c.doInit}"/>  
-    <c:HomePageServer aura:id="service"/> 
+		<c:HomePageService aura:id="service"/> 
 	<div class="slds-section slds-is-open slds-card" > 
-        <h3 class="slds-section__title slds-theme_shade sfdc-headercolor" >
-            <span class="slds-truncate slds-p-horizontal_small" title="Section Title">
-                Element Recent
-            </span>
-        </h3> 
-        <div aria-hidden="false" class="slds-section__content">
+				<h3 class="slds-section__title slds-theme_shade sfdc-headercolor" >
+						<span class="slds-truncate slds-p-horizontal_small" title="Section Title">
+										{!$Label.c.elementrecent}
+						</span>
+				</h3> 
+				<div aria-hidden="false" class="slds-section__content">
 			<aura:iteration items="{!v.accList}" var="item" indexVar="i">
-              	<ul class="marginleft"> 
-                    <aura:if isTrue="{!equals(item.Type,'Account')}">
-                        <li>  
-                          <dl class="slds-dl_inline">
-                               <dt class="slds-dl_inline__label">
+								<ul class="marginleft"> 
+										<aura:if isTrue="{!equals(item.Type,'Account')}">
+												<li>  
+													<dl class="slds-dl_inline">
+															 <dt class="slds-dl_inline__label">
 									<lightning:icon iconName="utility:user" size="xx-small" />                               
-                               </dt>
-                             	<dd class="slds-dl_inline__detail"> 
-                                    <ui:outputURL label="{!item.Name}"/> 
-                               </dd> 
-                           </dl> 
-                        </li>
-                        <aura:set attribute="else">
-                           	<li>  
-                              <dl class="slds-dl_inline">
-                                   <dt class="slds-dl_inline__label">
-    									 <lightning:icon iconName="utility:notebook" size="xx-small" />                               
-                                   </dt>
-                                  <dd class="slds-dl_inline__detail">
-                                   	 	 <ui:outputURL label="{!item.Name}"/> 
-                                   </dd> 
-                                </dl> 
-                            </li> 
-                        </aura:set>
-                    </aura:if>   
-                </ul>
-            </aura:iteration> 
+															 </dt>
+															<dd class="slds-dl_inline__detail"> 
+																		<ui:outputURL label="{!item.Name}"/> 
+															 </dd> 
+													 </dl> 
+												</li>
+												<aura:set attribute="else">
+														<li>  
+															<dl class="slds-dl_inline">
+																	 <dt class="slds-dl_inline__label">
+											 <lightning:icon iconName="utility:notebook" size="xx-small" />
+																	 </dt>
+																	<dd class="slds-dl_inline__detail">
+																			 <ui:outputURL label="{!item.Name}"/> 
+																	 </dd> 
+																</dl> 
+														</li> 
+												</aura:set>
+										</aura:if>   
+								</ul>
+						</aura:iteration> 
 		</div>
-        <br/>
+				<br/>
 	</div>
 </aura:component>

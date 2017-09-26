@@ -1,0 +1,14 @@
+<aura:component Controller="UploadDocument_CTRL" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+	<aura:attribute name="parentId" type="Id"/>
+    
+    <aura:handler event="aura:waiting" action="{!c.waiting}"/>
+    <aura:handler event="aura:doneWaiting" action="{!c.doneWaiting}"/>
+    
+    <div class="container">
+        <input type="file" class="file" aura:id="file" />
+        <button onclick="{!c.save}">Save</button>
+        <div aura:id="uploading" class="notUploading">
+            <img src="/resource/pic" alt="uploading" class="small-spinner" /> Uploading...
+    	</div>
+    </div>
+</aura:component>

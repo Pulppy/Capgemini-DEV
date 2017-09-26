@@ -6,10 +6,10 @@
 	<aura:attribute name="page" type="integer" description="using for store page Number"/>
 	<aura:attribute name="pages" type="integer" description="using for store All Pages page Number"/>
 	<aura:attribute name="total" type="integer" description="total records count store "/>
-    <c:HomePageServer aura:id="service"/>
+    <c:HomePageService aura:id="service"/>
     
 	<!-- Panitaion header Start -->
-	<div class="slds-m-around--medium">
+	<div class="slds-m-around--medium" style="margin-top:-2px">
 		<div class="slds-page-header sfdc-headercolor" role="banner">
 			<div class="slds-grid">
 				<div class="slds-col">
@@ -45,7 +45,7 @@
 							<li class="slds-item">
 								<article class="slds-tile slds-tile_board">
 									<h3 class="slds-tile__title slds-truncate sfdc-fontSmall" title="{!item.Applicant__r.Name}">
-										<a href="javascript:void(0);">{!item.Applicant__r.Name}</a>
+                                        <a onclick="{!c.actionEditApplicant}" id = "{!item.Applicant__c}" >{!item.id}{!item.Applicant__r.Name}</a>
 									</h3>
 									<div class="slds-tile__detail">
 										<p class="slds-text-heading_medium">{!item.id}</p>
@@ -54,7 +54,7 @@
 											<div class="slds-col slds-size--1-of-2 ">  
                                                 <p class="slds-truncate" title="{!item.Applicant__r.Email__c}" > 
                                                     <lightning:icon iconName="utility:email" size="x-small" />                  
-                                                    <a href="javascript:void(0);"> {!item.Applicant__r.Email__c}</a>    	
+                                                    <ui:outputURL click="{!c.actionEditApplicant}" label="{!item.Applicant__r.Email__c}"> </ui:outputURL>   	
                                                 </p>
 											</div>
 											<div class="slds-col slds-size--1-of-2 "> 
@@ -84,7 +84,7 @@
 									<div class="slds-col slds-size--1-of-2 ">   
                                         <p class="slds-truncate" title="{!item.LastModifiedBy.Name}" >  
                                             Modified at 
-                                            <b> {!item.LastModifiedDate}</b> 
+                                            <b><ui:outputDateTime value="{!item.LastModifiedDate}" format="DD/MM/YYYY"/>  </b> 
                                             by {!item.LastModifiedBy.Name}
                                         </p>
                   
