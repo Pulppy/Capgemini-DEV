@@ -7,7 +7,7 @@
 	<aura:attribute name="pages" type="integer" description="using for store All Pages page Number"/>
 	<aura:attribute name="total" type="integer" description="total records count store "/>
     <c:HomePageService aura:id="service"/>
-    
+    //Phuc
 	<!-- Panitaion header Start -->
 	<div class="slds-m-around--medium" style="margin-top:-2px">
 		<div class="slds-page-header sfdc-headercolor" role="banner">
