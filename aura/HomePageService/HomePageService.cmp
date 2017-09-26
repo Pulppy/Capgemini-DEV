@@ -1,0 +1,10 @@
+<aura:component controller="HomePageService_CTRL">
+	<aura:method name="getListData" action="{!c.getListData}">
+        <aura:attribute name="page" type="integer"/>
+        <aura:attribute name="recordToDisply" type="integer"/>
+        <aura:attribute name="callback" type="function"/>
+    </aura:method>
+     <aura:method name="getListAccount" action="{!c.getListAccount}">
+        <aura:attribute name="callback" type="function"/>
+    </aura:method>
+</aura:component>
