@@ -1,0 +1,24 @@
+.THIS .organce {
+	background-color: orange;
+	color: white;
+}
+.THIS .green {
+	background-color: green;
+	color: white;
+} 
+.THIS .select-width{ 
+	width: 80%; 
+  
+}
+.THIS .slds-page-header{ 
+ border-radius: 5px;
+  
+} 
+
+
+.THIS button{
+	font-size: x-small;
+}
+.THIS .slds-has-dividers--top{
+	margin-top: 2%;
+}

@@ -1,8 +1,0 @@
-<aura:component description="footer" implements="forceCommunity:availableForAllPageTypes" access="global" >
-    <aura:attribute name="footer" type="String" default="Ⓒ WebCreditor 2015" access="global" />
-    <aura:attribute name="footername" type="String" default="- 2017 -" access="global" />
-    <div class="grid">
-        <span>{!v.footer}</span><br />
-        <span>{!v.footername}</span>
-    </div>
-</aura:component>

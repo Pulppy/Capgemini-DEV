@@ -103,7 +103,11 @@
           <ui:inputEmail aura:id="email" label="Email" placeholder="abc@email.com" value="{!v.app.Email__c}"/>
         </div>
         <div style="margin-top: 15px" >
-          <button class="slds-button slds-button_brand" style="left: 250px;" onclick="{!c.saveEmailPhone}">Valider</button>
+         <!--  <button class="slds-button slds-button_brand" style="left: 250px;" onclick="{!c.saveEmailPhone}">Valider</button> -->
+        
+        </div>
+         <div class="slds-float--right">
+            <lightning:button class="slds-button slds-button_brand btnarrow" variant="true" label="Prêt(s)" />
         </div>
       </div>
     </div>
