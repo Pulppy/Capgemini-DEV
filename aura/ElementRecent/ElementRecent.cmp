@@ -19,7 +19,7 @@
 									<lightning:icon iconName="utility:user" size="xx-small" />                               
 															 </dt>
 															<dd class="slds-dl_inline__detail"> 
-																		<ui:outputURL label="{!item.Name}"/> 
+																		<ui:outputURL value="{!'https://capvietnamteam-dev-ed.lightning.force.com/one/one.app#/sObject/' +item.Id}" label="{!item.Name}"/> 
 															 </dd> 
 													 </dl> 
 												</li>
@@ -30,7 +30,7 @@
 											 <lightning:icon iconName="utility:notebook" size="xx-small" />
 																	 </dt>
 																	<dd class="slds-dl_inline__detail">
-																			 <ui:outputURL label="{!item.Name}"/> 
+																			 <ui:outputURL value="{!'https://capvietnamteam-dev-ed.lightning.force.com/one/one.app#/sObject/' +item.Id}" label="{!item.Name}"/> 
 																	 </dd> 
 																</dl> 
 														</li> 
