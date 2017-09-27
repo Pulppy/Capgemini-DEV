@@ -31,23 +31,34 @@ public with sharing class CTRL_ApplicantSubScription {
    
      @AuraEnabled
     public static Account saveApplicantInformation(Account anApplicant){
-      System.debug('@@@@anApplicant before insert: '+ anApplicant);
-      if(anApplicant != null){
-        anApplicant.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Person Account').getRecordTypeId();     
-        Upsert anApplicant;
-      }
-      return anApplicant;
+      try{
+          System.debug('@@@@anApplicant before insert: '+ anApplicant);
+          if(anApplicant != null){
+            anApplicant.RecordTypeId = Schema.SObjectType.Account.getRecordTypeInfosByName().get('Person Account').getRecordTypeId();     
+            Upsert anApplicant;
+          }
+        }catch(Exception ex){
+          System.debug('@@@@ex '+ ex);
+        }
+        return anApplicant;
     }
 
 
      @AuraEnabled
     public static Account getAccountsByID(String applicantID){
-      System.debug('@@@@applicantID: '+ applicantID);
+      try{
+        System.debug('@@@@applicantID: '+ applicantID);
+        Account result = new Account();
         if(applicantID != null){
-          return [Select Id, FirstName, LastName, Salutation,PersonBirthdate,Citizenships__c, PersonMobilePhone, PersonHomePhone, Email__c From Account Where id=:applicantID];
+            result = [Select Id, FirstName, LastName, Salutation,PersonBirthdate,Citizenships__c, PersonMobilePhone, PersonHomePhone, Email__c From Account Where id=:applicantID];
+           
         }
-        return new Account();
-
+        return result;
+      }catch(Exception ex){
+        System.debug('@@@@ex: '+ ex);
+         return new Account();
+      }
+       
     }
    
 }

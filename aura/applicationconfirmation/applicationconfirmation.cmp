@@ -15,8 +15,8 @@
      <div class="row-fluid" >
       <div class="slds-modal__container">
          <div class="slds-modal__content" style="background-color: blue;">
-            <div class="slds-modal__container " style="height: 95px" >
-              <h1 class="slds-text-heading_medium slds-hyphenate " style="color : white;font-weight: bold;text-transform: uppercase;">Mme DUPONT Stéphanie</h1>
+            <div class="slds-modal__container " style="height: 95px; align-items: center;" >
+              <h1 class="slds-text-heading_medium slds-hyphenate " style="color : white;font-weight: bold;text-transform: uppercase;">{!v.app.Salutation}{!v.app.Name}</h1>
             </div>
             <div class="slds-modal__content slds-p-around_medium">
                <div class="control-group acd"><a class="slds-icon_container " href="">
@@ -73,13 +73,16 @@
               </div>
         </div>
      </div>
-      <div>
+     <!--  <div>
           <button class="slds-button slds-button_brand" onclick="{!c.openLoanPage}" >
               <span style="float: left">
                  <lightning:icon iconName="utility:left" class="slds-button__icon_left" size="small"  />
               </span>
               <span style="font-weight: bold;float: right;">Adhésions </span>
           </button>
+      </div> -->
+      <div class="slds-float--left">
+            <lightning:button class="slds-button slds-button_brand btnarrow" variant="true" label="Adhésions" onclick="{!c.openLoanPage}" />
       </div>
    </div>
    <div id="" style="height: 640px;">
@@ -103,12 +106,10 @@
           <ui:inputEmail aura:id="email" label="Email" placeholder="abc@email.com" value="{!v.app.Email__c}"/>
         </div>
         <div style="margin-top: 15px" >
-         <!--  <button class="slds-button slds-button_brand" style="left: 250px;" onclick="{!c.saveEmailPhone}">Valider</button> -->
+          <button class="slds-button slds-button_brand" style="left: 250px;" onclick="{!c.saveEmailPhone}">Valider</button>
         
         </div>
-         <div class="slds-float--right">
-            <lightning:button class="slds-button slds-button_brand btnarrow" variant="true" label="Prêt(s)" />
-        </div>
+         
       </div>
     </div>
   </section>

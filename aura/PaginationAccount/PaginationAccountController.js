@@ -15,8 +15,7 @@
 		var recordToDisply = component.find("recordSize").get("v.value");
 		//Use HomepageServer get data to server
 		var service = component.find("service");
-		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) {
-			component.set("v.Accounts", data.accounts);
+		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) { 
 			component.set("v.Application", data.application); 
 			component.set("v.page", data.page);
 			component.set("v.total", data.total);
@@ -43,8 +42,7 @@
 		page = direction === "Previous Page" ? (page - 1) : (page + 1);
 		//Use HomepageServer get data to server
 		var service = component.find("service");
-		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) {
-		  component.set("v.Accounts", data.accounts);
+		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) { 
 			component.set("v.Application", data.application);
 			component.set("v.page", data.page);
 			component.set("v.total", data.total);
@@ -71,8 +69,7 @@
 		page = direction === "Previous Page" ? (page - 1) : (page + 1);
 		//Use HomepageServer get data to server
 		var service = component.find("service");
-		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) {
-			component.set("v.Accounts", data.accounts);
+		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) { 
 			component.set("v.Application", data.application);
 			component.set("v.page", data.page);
 			component.set("v.total", data.total);
@@ -94,8 +91,7 @@
 		var recordToDisply = component.find("recordSize").get("v.value");
 		//Use HomepageServer get data to server
 		var service = component.find("service");
-		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) {
-			component.set("v.Accounts", data.accounts);
+		service.getListData(page,recordToDisply,$A.getCallback(function(error, data) { 
 			component.set("v.Application", data.application);
 			component.set("v.page", data.page);
 			component.set("v.total", data.total);
@@ -117,5 +113,7 @@
 			"url": '/applicantsubscription?applicantID='+event.target.id
 		});
 		urlEvent.fire();
+        //Xin chào viêt nam
+        //// Really
 	},
 })

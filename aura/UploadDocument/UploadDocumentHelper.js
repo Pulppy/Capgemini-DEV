@@ -60,11 +60,11 @@
             if (fromPos < toPos) {
                 self.uploadChunk(component, file, dataURL, fromPos, toPos, contentDocumentId);  
             }else{
-                component.set("v.message", "File Uploaded");
+                //component.set("v.message", "File Uploaded");
                 console.log('@@ uploaded');
             }
         });
-        component.set("v.message", "Uploading...");
+        //component.set("v.message", "Uploading...");
 
         $A.enqueueAction(action); 
    }

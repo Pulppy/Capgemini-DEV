@@ -22,3 +22,26 @@
 .THIS .toggle {
    display: none;
  }
+ .THIS .btnarrow {
+    height: 40px;
+    line-height: 40px;
+    vertical-align: middle;
+    text-align: center;
+    padding: 0 10px;
+    color: #ffffff;
+    background-color: Navy;
+    position: relative;
+    display: inline-block;
+    border: 0;
+}
+
+.THIS .btnarrow:after {
+   position: absolute;
+    right: 73px;
+    content: " ";
+    width: 0px;
+    height: 40px;
+    border-top: 20px solid transparent;
+    border-bottom: 20px solid transparent;
+    border-right: 25px solid navy;
+}
