@@ -9,4 +9,11 @@
 		// Fire the event  
 		compEvent.fire();
 	},
+    actionEditAccount: function(component, event, helper) {
+		var urlEvent = $A.get("e.force:navigateToURL");
+		urlEvent.setParams({
+			"url": '/applicantsubscription?applicantID='+event.target.id
+		});
+		urlEvent.fire();
+	},
 })
