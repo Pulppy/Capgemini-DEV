@@ -32,7 +32,7 @@
 									<dd class="slds-dl_inline__detail">
 										 <ui:outputURL value="{!'https://capvietnamteam-dev-ed.lightning.force.com/one/one.app#/sObject/' +item.Id}" label="{!item.Name}"/> 
 									 </dd> 
-									</dl> 
+								</dl> 
 							</li> 
 						</aura:set>
 					</aura:if>   
