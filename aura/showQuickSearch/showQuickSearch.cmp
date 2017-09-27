@@ -15,10 +15,8 @@
         <div aria-hidden="false" class="slds-section__content">
             <div class="slds-form-element__control inputField">
                 <c:QuickSearch objectAPIName="account" IconName="standard:account" selectedRecord="{!v.selectedLookUpRecord}"/>
-            </div>  
-            <div class="slds-no-flex">
-                <center> <lightning:button class="button" label="Search" /> </center> <br/>
-            </div> 
+            </div>   <br/>
+            
 		</div>
 	</div> 
 </aura:component>
