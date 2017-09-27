@@ -1,13 +1,12 @@
 <aura:component implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
 	<ltng:require styles="{!$Resource.SFDCStyle}"  />
 	<aura:handler name="init" value="{!this}" action="{!c.doInit}" />
-	<aura:attribute name="Accounts" type="Account[]"/>
-    <aura:attribute name="Application" type="Account[]"/> 
+	<aura:attribute name="Application" type="Account[]"/> 
 	<aura:attribute name="page" type="integer" description="using for store page Number"/>
 	<aura:attribute name="pages" type="integer" description="using for store All Pages page Number"/>
 	<aura:attribute name="total" type="integer" description="total records count store "/>
-    <c:HomePageService aura:id="service"/>
-    
+	<c:HomePageService aura:id="service"/>
+
 	<!-- Panitaion header Start -->
 	<div class="slds-m-around--medium" style="margin-top:-2px">
 		<div class="slds-page-header sfdc-headercolor" role="banner">
@@ -22,12 +21,12 @@
 				<div class="slds-col select-width"> 
 					<p class="slds-page-header__title slds-truncate sfdc-fontSmall sfdc-float-right">
 						<aura:if isTrue="{!v.page &gt; 1}">
-                        	<ui:button press="{!c.previousPage}" label="Previous Page"/>
-                        </aura:if>
-                           ({!v.page} - {!v.pages})
-                        <aura:if isTrue="{!v.page &lt; v.pages}">
-                           	<ui:button aura:id="nextbtn" press="{!c.nextPage}" label="Next Page"/>
-                        </aura:if>
+							<ui:button press="{!c.previousPage}" label="Previous Page"/>
+						</aura:if>
+							({!v.page} - {!v.pages})
+						<aura:if isTrue="{!v.page &lt; v.pages}">
+							<ui:button aura:id="nextbtn" press="{!c.nextPage}" label="Next Page"/>
+						</aura:if>
 					</p>
 				</div>
 			</div>
@@ -37,27 +36,27 @@
 		<!-- Row Record Start-->
 		<ul class="slds-has-dividers--top">
 			<!--Iterate account records Start -->
-            <aura:iteration items="{!v.Application}" var="item">   
-                <div class="slds-grid">
+			<aura:iteration items="{!v.Application}" var="item">
+				<div class="slds-grid">
 					<!-- Content left -->
 					<div class="slds-col slds-size--5-of-12 "> 
 						<ul class="slds-has-dividers_around-space">
 							<li class="slds-item">
 								<article class="slds-tile slds-tile_board">
 									<h3 class="slds-tile__title slds-truncate sfdc-fontSmall" title="{!item.Applicant__r.Name}">
-                                        <a onclick="{!c.actionEditApplicant}" id = "{!item.Applicant__c}" >{!item.id}{!item.Applicant__r.Name}</a>
+										<a onclick="{!c.actionEditApplicant}" id = "{!item.Applicant__c}" >{!item.id}{!item.Applicant__r.Name}</a>
 									</h3>
 									<div class="slds-tile__detail">
 										<p class="slds-text-heading_medium">{!item.id}</p>
 										<br/>
 										<div class="slds-grid sfdc-fontSmall">
-											<div class="slds-col slds-size--1-of-2 ">  
-                                                <p class="slds-truncate" title="{!item.Applicant__r.Email__c}" > 
-                                                    <lightning:icon iconName="utility:email" size="x-small" />                  
-                                                    <ui:outputURL click="{!c.actionEditApplicant}" label="{!item.Applicant__r.Email__c}"> </ui:outputURL>   	
-                                                </p>
+											<div class="slds-col slds-size--1-of-2 ">
+												<p class="slds-truncate" title="{!item.Applicant__r.Email__c}" > 
+													<lightning:icon iconName="utility:email" size="x-small" />
+													<ui:outputURL click="{!c.actionEditApplicant}" label="{!item.Applicant__r.Email__c}"> </ui:outputURL>
+												</p>
 											</div>
-											<div class="slds-col slds-size--1-of-2 "> 
+											<div class="slds-col slds-size--1-of-2 ">
 												<p class="slds-truncate" title="{!item.Phone}" style="float:right">{!item.Applicant__r.Phone}</p>
 											</div>
 										</div>
@@ -72,71 +71,68 @@
 						<ul class="slds-has-dividers_around-space">
 							<li class="slds-item">
 								<article class="slds-tile slds-tile_board"> 
-								<div class="slds-grid sfdc-fontSmall">
-									<div class="slds-col slds-size--1-of-2 "> 
-										<p class="slds-truncate" title="{!item.Name}" >
-											<h3 class="slds-tile__title slds-truncate" title="{!item.Name}">
-												<lightning:icon iconName="utility:phone_portrait" size="x-small" /> 
-												<a href="javascript:void(0);"> {!item.Name}</a>
-											</h3>
-										</p>
-									</div>
-									<div class="slds-col slds-size--1-of-2 ">   
-                                        <p class="slds-truncate" title="{!item.LastModifiedBy.Name}" >  
-                                            Modified at 
-                                            <b><ui:outputDateTime value="{!item.LastModifiedDate}" format="DD/MM/YYYY"/>  </b> 
-                                            by {!item.LastModifiedBy.Name}
-                                        </p>
-                  
- 
-									</div>
-								</div>
-								<div class="slds-tile__detail">
-									<p class="slds-text-heading_medium">{!item.id}</p>
-									<br/>
 									<div class="slds-grid sfdc-fontSmall">
-										 <div class="slds-col slds-size--1-of-2 "> 
-											<aura:if isTrue="{!equals(item.Status__c,'Incomplete')}">
-                                                  <p class="slds-truncate" title="{!item.Name}" >
-                                                    Status of Account:
-                                                    <span class="organce"> {!item.Status__c}</span>
-												</p>
-                                            <aura:set attribute="else">
-                                                  <p class="slds-truncate" title="{!item.Name}" >
-                                                    Status of Account:
-                                                    <span class="green"> {!item.Status__c}</span>
-                                                </p>
-                                            </aura:set>
-                                            </aura:if>    
-										 </div>
+										<div class="slds-col slds-size--1-of-2 "> 
+											<p class="slds-truncate" title="{!item.Name}" >
+												<h3 class="slds-tile__title slds-truncate" title="{!item.Name}">
+													<lightning:icon iconName="utility:phone_portrait" size="x-small" /> 
+													<a href="javascript:void(0);"> {!item.Name}</a>
+												</h3>
+											</p>
+										</div>
+										<div class="slds-col slds-size--1-of-2 ">
+											<p class="slds-truncate" title="{!item.LastModifiedBy.Name}" >
+												Modified at 
+												<b><ui:outputDateTime value="{!item.LastModifiedDate}" format="DD/MM/YYYY"/>  </b>
+												by {!item.LastModifiedBy.Name}
+											</p>
+										</div>
 									</div>
-								</div>
+									<div class="slds-tile__detail">
+										<p class="slds-text-heading_medium">{!item.id}</p>
+										<br/>
+										<div class="slds-grid sfdc-fontSmall">
+											 <div class="slds-col slds-size--1-of-2 ">
+												<aura:if isTrue="{!equals(item.Status__c,'Incomplete')}">
+													<p class="slds-truncate" title="{!item.Name}" >
+														Status of Account:
+														<span class="organce"> {!item.Status__c}</span>
+													</p>
+													<aura:set attribute="else">
+														<p class="slds-truncate" title="{!item.Name}" >
+															Status of Account:
+															<span class="green"> {!item.Status__c}</span>
+														</p>
+													</aura:set>
+												</aura:if>
+											</div>
+										</div>
+									</div>
 								</article>
 							</li><br/>
 						</ul>
 					</div>
 				</div>
-            </aura:iteration>
-			
+			</aura:iteration>
 			<!--Iterate account records End -->
 		</ul>
 		<!-- Row Record End -->
-       	<!-- footer table -->
-        <div class="slds-page-header sfdc-headercolor" role="banner">
-         	<div class="slds-grid">
-                <div class="slds-col select-width"> 
-                    <p class="slds-page-header__title slds-truncate sfdc-fontSmall sfdc-float-right">
-                        <aura:if isTrue="{!v.page &gt; 1}">
-                            <ui:button press="{!c.previousPage}" label="Previous Page"/>
-                        </aura:if>
-                        ({!v.page} - {!v.pages})
-                        <aura:if isTrue="{!v.page &lt; v.pages}">
-                            <ui:button aura:id="nextbtn" press="{!c.nextPage}" label="Next Page"/>
-                        </aura:if>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <!-- footer table End -->
+		<!-- Footer table Start -->
+		<div class="slds-page-header sfdc-headercolor" role="banner">
+			<div class="slds-grid">
+				<div class="slds-col select-width"> 
+					<p class="slds-page-header__title slds-truncate sfdc-fontSmall sfdc-float-right">
+						<aura:if isTrue="{!v.page &gt; 1}">
+							<ui:button press="{!c.previousPage}" label="Previous Page"/>
+						</aura:if>
+						({!v.page} - {!v.pages})
+						<aura:if isTrue="{!v.page &lt; v.pages}">
+							<ui:button aura:id="nextbtn" press="{!c.nextPage}" label="Next Page"/>
+						</aura:if>
+					</p>
+				</div>
+			</div>
+		</div>
+		<!-- Footer table End -->
 	</div>
 </aura:component>

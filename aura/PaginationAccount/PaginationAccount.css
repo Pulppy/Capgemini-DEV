@@ -5,17 +5,13 @@
 .THIS .green {
 	background-color: green;
 	color: white;
-} 
-.THIS .select-width{ 
-	width: 80%; 
-  
+}
+.THIS .select-width{
+	width: 80%;
 }
 .THIS .slds-page-header{ 
  border-radius: 5px;
-  
-} 
-
-
+}
 .THIS button{
 	font-size: x-small;
 }
